@@ -1,0 +1,15 @@
+d:\AdvanceProject\BachatGat\BachatGatDAL\bin\Debug\net7.0\BachatGatDAL.deps.json
+d:\AdvanceProject\BachatGat\BachatGatDAL\bin\Debug\net7.0\BachatGatDAL.dll
+d:\AdvanceProject\BachatGat\BachatGatDAL\bin\Debug\net7.0\BachatGatDAL.pdb
+d:\AdvanceProject\BachatGat\BachatGatDAL\bin\Debug\net7.0\BachatGatDTO.dll
+d:\AdvanceProject\BachatGat\BachatGatDAL\bin\Debug\net7.0\BachatGatDTO.pdb
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\BachatGatDAL.csproj.AssemblyReference.cache
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\BachatGatDAL.GeneratedMSBuildEditorConfig.editorconfig
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\BachatGatDAL.AssemblyInfoInputs.cache
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\BachatGatDAL.AssemblyInfo.cs
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\BachatGatDAL.csproj.CoreCompileInputs.cache
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\BachatGa.68023AC4.Up2Date
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\BachatGatDAL.dll
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\refint\BachatGatDAL.dll
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\BachatGatDAL.pdb
+d:\AdvanceProject\BachatGat\BachatGatDAL\obj\Debug\net7.0\ref\BachatGatDAL.dll

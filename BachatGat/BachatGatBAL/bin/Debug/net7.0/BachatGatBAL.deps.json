@@ -1,0 +1,56 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "BachatGatBAL/1.0.0": {
+        "dependencies": {
+          "BachatGatDAL": "1.0.0",
+          "BachatGatDTO": "1.0.0"
+        },
+        "runtime": {
+          "BachatGatBAL.dll": {}
+        }
+      },
+      "BachatGatDAL/1.0.0": {
+        "dependencies": {
+          "BachatGatDTO": "1.0.0"
+        },
+        "runtime": {
+          "BachatGatDAL.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "BachatGatDTO/1.0.0": {
+        "runtime": {
+          "BachatGatDTO.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BachatGatBAL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BachatGatDAL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BachatGatDTO/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

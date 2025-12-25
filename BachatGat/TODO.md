@@ -1,0 +1,1 @@
+- [x] Modify SignIn method in AuthController.cs to support both member and saving group login based on IsMemberLogin flag

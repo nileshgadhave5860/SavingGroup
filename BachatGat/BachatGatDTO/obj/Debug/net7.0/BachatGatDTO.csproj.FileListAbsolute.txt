@@ -1,0 +1,11 @@
+d:\AdvanceProject\BachatGat\BachatGatDTO\bin\Debug\net7.0\BachatGatDTO.deps.json
+d:\AdvanceProject\BachatGat\BachatGatDTO\bin\Debug\net7.0\BachatGatDTO.dll
+d:\AdvanceProject\BachatGat\BachatGatDTO\bin\Debug\net7.0\BachatGatDTO.pdb
+d:\AdvanceProject\BachatGat\BachatGatDTO\obj\Debug\net7.0\BachatGatDTO.GeneratedMSBuildEditorConfig.editorconfig
+d:\AdvanceProject\BachatGat\BachatGatDTO\obj\Debug\net7.0\BachatGatDTO.AssemblyInfoInputs.cache
+d:\AdvanceProject\BachatGat\BachatGatDTO\obj\Debug\net7.0\BachatGatDTO.AssemblyInfo.cs
+d:\AdvanceProject\BachatGat\BachatGatDTO\obj\Debug\net7.0\BachatGatDTO.csproj.CoreCompileInputs.cache
+d:\AdvanceProject\BachatGat\BachatGatDTO\obj\Debug\net7.0\BachatGatDTO.dll
+d:\AdvanceProject\BachatGat\BachatGatDTO\obj\Debug\net7.0\refint\BachatGatDTO.dll
+d:\AdvanceProject\BachatGat\BachatGatDTO\obj\Debug\net7.0\BachatGatDTO.pdb
+d:\AdvanceProject\BachatGat\BachatGatDTO\obj\Debug\net7.0\ref\BachatGatDTO.dll
