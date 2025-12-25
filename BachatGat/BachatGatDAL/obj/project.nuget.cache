@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nNYKkrFDP0I=",
+  "dgSpecHash": "e9ruLSGeCHA=",
   "success": true,
-  "projectFilePath": "D:\\AdvanceProject\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
+  "projectFilePath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nilsi\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\nilsi\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
@@ -46,9 +46,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "BachatGatDAL depends on Microsoft.EntityFrameworkCore (>= 8.0.9) but Microsoft.EntityFrameworkCore 8.0.9 was not found. Microsoft.EntityFrameworkCore 8.0.10 was resolved instead.",
-      "projectPath": "D:\\AdvanceProject\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
+      "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
       "warningLevel": 1,
-      "filePath": "D:\\AdvanceProject\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
+      "filePath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore",
       "targetGraphs": [
         "net8.0"
@@ -58,9 +58,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "BachatGatDAL depends on Microsoft.EntityFrameworkCore.Design (>= 8.0.9) but Microsoft.EntityFrameworkCore.Design 8.0.9 was not found. Microsoft.EntityFrameworkCore.Design 8.0.10 was resolved instead.",
-      "projectPath": "D:\\AdvanceProject\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
+      "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
       "warningLevel": 1,
-      "filePath": "D:\\AdvanceProject\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
+      "filePath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore.Design",
       "targetGraphs": [
         "net8.0"
