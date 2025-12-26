@@ -10,8 +10,9 @@
 !README.md
 !TODO.md
 
-# Ignore specific folders
+# Ignore specific folders and all contents
 BachatGatAPI/bin/
+BachatGatAPI/bin/**
 
 # Also track directories for their contents
 !*/
