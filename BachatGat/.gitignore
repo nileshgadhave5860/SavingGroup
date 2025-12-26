@@ -1,16 +1,30 @@
-# Ignore all files by default
-*
-*.*
+# Ignore build and object directories
+bin/
+obj/
+.vs/
+.vscode/
 
-# But track specific file types
-!.cs
+# Ignore compiled output
+*.dll
+*.exe
+*.pdb
+*.so
+*.dylib
+
+# Ignore NuGet packages
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Ignore cache and temporary files
+*.cache
+*.log
+*.tmp
+
+# Track source code and configuration
 !*.cs
 !*.json
 !.gitignore
 !README.md
 !TODO.md
-
-# Also track directories for their contents
-!*/
-!.github/
-!.vscode/
