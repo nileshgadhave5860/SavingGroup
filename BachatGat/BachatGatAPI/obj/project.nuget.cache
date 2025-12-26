@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IOXZd9/pIPI=",
+  "dgSpecHash": "wN+LDPVP/FQ=",
   "success": true,
-  "projectFilePath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
+  "projectFilePath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nilsi\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\nilsi\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
@@ -71,9 +71,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "BachatGatAPI depends on Microsoft.EntityFrameworkCore.SqlServer (>= 8.0.9) but Microsoft.EntityFrameworkCore.SqlServer 8.0.9 was not found. Microsoft.EntityFrameworkCore.SqlServer 8.0.10 was resolved instead.",
-      "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
+      "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
       "warningLevel": 1,
-      "filePath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
+      "filePath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
       "libraryId": "Microsoft.EntityFrameworkCore.SqlServer",
       "targetGraphs": [
         "net8.0"
@@ -83,9 +83,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "BachatGatAPI depends on Swashbuckle.AspNetCore (>= 6.6.0) but Swashbuckle.AspNetCore 6.6.0 was not found. Swashbuckle.AspNetCore 6.6.1 was resolved instead.",
-      "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
+      "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
       "warningLevel": 1,
-      "filePath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
+      "filePath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
       "libraryId": "Swashbuckle.AspNetCore",
       "targetGraphs": [
         "net8.0"
