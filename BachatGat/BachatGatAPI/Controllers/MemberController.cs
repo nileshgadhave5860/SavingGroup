@@ -88,5 +88,22 @@ namespace BachatGatAPI.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpGet("GetMemberDataBySGID/{sgId}")]
+        public async Task<ActionResult<GetMemberBySGIdResponseDto>> GetMemberDataBySGID(int sgId)
+        {
+            try
+            {
+                var result = await _service.GetMemberDataBySGId(sgId);
+                if (!result.Success)
+                    return BadRequest(result);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }

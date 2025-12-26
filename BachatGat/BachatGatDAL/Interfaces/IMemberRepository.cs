@@ -9,5 +9,6 @@ namespace BachatGatDAL.Interfaces
         Task<MemberStatusResponseDto> ActivateMember(int memberId);
         Task<MemberStatusResponseDto> DeactivateMember(int memberId);
         Task<MemberLoginResponseDto> Authenticate(MemberLoginDto request);
+        Task<GetMemberBySGIdResponseDto> GetMemberDataBySGId(int sgId);
     }
 }

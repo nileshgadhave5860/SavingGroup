@@ -348,5 +348,49 @@ namespace BachatGatDAL.Repositories
                 throw new Exception($"Error authenticating member: {ex.Message}");
             }
         }
+
+        public async Task<GetMemberBySGIdResponseDto> GetMemberDataBySGId(int sgId)
+        {
+            try
+            {
+                var members = await _context.Members
+                    .Where(m => m.SGId == sgId)
+                    .Select(m => new MemberBySGIdDto
+                    {
+                        MemberId = m.MemberId,
+                        FullName = m.FullName,
+                        Address = m.Address,
+                        MobileNo = m.MobileNo,
+                        Email = m.Email,
+                        TotalSaving = m.TotalSaving,
+                        TotalLoan = m.TotalLoan,
+                        Deposit = m.Deposit,
+                        IsActive = m.IsActive,
+                        PaymentType = m.PaymentType
+                    })
+                    .ToListAsync();
+
+                if (members == null || members.Count == 0)
+                {
+                    return new GetMemberBySGIdResponseDto
+                    {
+                        Members = new List<MemberBySGIdDto>(),
+                        Success = false,
+                        Message = "No members found for the given Saving Group ID"
+                    };
+                }
+
+                return new GetMemberBySGIdResponseDto
+                {
+                    Members = members,
+                    Success = true,
+                    Message = $"Retrieved {members.Count} member(s) successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving members: {ex.Message}");
+            }
+        }
     }
 }

@@ -37,5 +37,10 @@ namespace BachatGatBAL.Services
         {
             return await _repository.Authenticate(request);
         }
+
+        public async Task<GetMemberBySGIdResponseDto> GetMemberDataBySGId(int sgId)
+        {
+            return await _repository.GetMemberDataBySGId(sgId);
+        }
     }
 }

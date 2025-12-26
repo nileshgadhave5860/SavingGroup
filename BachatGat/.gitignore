@@ -1,0 +1,16 @@
+# Ignore all files by default
+*
+*.*
+
+# But track specific file types
+!.cs
+!*.cs
+!*.json
+!.gitignore
+!README.md
+!TODO.md
+
+# Also track directories for their contents
+!*/
+!.github/
+!.vscode/

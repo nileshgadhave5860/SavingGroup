@@ -79,4 +79,25 @@ namespace BachatGatDTO.Models
         public string Message { get; set; }
         public string Token { get; set; }
     }
+
+    public class MemberBySGIdDto
+    {
+        public int MemberId { get; set; }
+        public string FullName { get; set; }
+        public string Address { get; set; }
+        public string MobileNo { get; set; }
+        public string Email { get; set; }
+        public decimal TotalSaving { get; set; }
+        public decimal TotalLoan { get; set; }
+        public decimal Deposit { get; set; }
+        public bool IsActive { get; set; }
+        public PaymentType PaymentType { get; set; }
+    }
+
+    public class GetMemberBySGIdResponseDto
+    {
+        public List<MemberBySGIdDto> Members { get; set; }
+        public bool Success { get; set; }
+        public string Message { get; set; }
+    }
 }

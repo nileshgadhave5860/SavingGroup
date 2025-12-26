@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BachatGatDAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ca97e7201a426cb6d97ddf6c7d3e4d53f571e0d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+baa088eab7711ec515006889b03ae92d69403f89")]
 [assembly: System.Reflection.AssemblyProductAttribute("BachatGatDAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BachatGatDAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
