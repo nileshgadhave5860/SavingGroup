@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BachatGatDAL", "BachatGatDA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BachatGatDTO", "BachatGatDTO\BachatGatDTO.csproj", "{A4799244-A413-CD83-056A-7CDE52C3EF9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BachatGatBGS", "BachatGatBGS\BachatGatBGS.csproj", "{DAD87F10-0EE1-6FA2-BF41-519B0E29E694}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{A4799244-A413-CD83-056A-7CDE52C3EF9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4799244-A413-CD83-056A-7CDE52C3EF9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4799244-A413-CD83-056A-7CDE52C3EF9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAD87F10-0EE1-6FA2-BF41-519B0E29E694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAD87F10-0EE1-6FA2-BF41-519B0E29E694}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAD87F10-0EE1-6FA2-BF41-519B0E29E694}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD87F10-0EE1-6FA2-BF41-519B0E29E694}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

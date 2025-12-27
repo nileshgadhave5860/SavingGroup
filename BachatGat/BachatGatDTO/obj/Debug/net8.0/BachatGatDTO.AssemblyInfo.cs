@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BachatGatDTO")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+baa088eab7711ec515006889b03ae92d69403f89")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f93e9ce8b0dcea199dc05605830e8250f5458f29")]
 [assembly: System.Reflection.AssemblyProductAttribute("BachatGatDTO")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BachatGatDTO")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

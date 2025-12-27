@@ -12,9 +12,12 @@ namespace BachatGatDAL.Data
         public DbSet<Member> Members { get; set; } = null!;
         public DbSet<BankAccount> BankAccounts { get; set; } = null!;
         public DbSet<CashAccount> CashAccounts { get; set; } = null!;
-
+        public DbSet<SavingTrasaction> SavingTrasactions { get; set; } = null!;
+        public DbSet<IntrestTrasaction> IntrestTrasactions { get; set; } = null!;
+        public DbSet<LoanTrasaction> LoanTrasactions { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+         
             base.OnModelCreating(modelBuilder);
         }
     }

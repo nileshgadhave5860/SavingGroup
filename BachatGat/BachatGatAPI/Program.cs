@@ -3,11 +3,13 @@ using BachatGatDAL.Repositories;
 using BachatGatBAL.Services;
 using BachatGatBAL.Interfaces;
 using BachatGatDAL.Data;
+//using BachatGatBGS.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using System.Diagnostics;
 using System.Linq;
+using BachatGatBGS;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,11 @@ builder.Services.AddCors(options =>
     });
 });
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
 // Member repository/service removed per request
 
 // Register Member services
@@ -37,12 +44,12 @@ builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<ISavingGroupRepository, SavingGroupRepository>();
 builder.Services.AddScoped<ISavingGroupService, SavingGroupService>();
 
+// Register Month services
+builder.Services.AddScoped<IMonthRepository, MonthRepository>();
+builder.Services.AddScoped<IMonthService, MonthService>();
+builder.Services.AddHostedService<MonthCreateService>();
 // Register AppDbContext using connection string from configuration
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-});
+
 
 var app = builder.Build();
 

@@ -10,6 +10,7 @@ namespace BachatGatDAL.Entities
         public int MonthId { get; set; }
         [ForeignKey("SavingGroupAccount")]
         public int SGId { get; set; }
+        public int PreMonthId { get; set; }
         public string MonthName { get; set; }
         public int MonthNo { get; set; }
         public int YearNo { get; set; }

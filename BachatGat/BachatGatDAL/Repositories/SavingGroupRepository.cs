@@ -16,7 +16,10 @@ namespace BachatGatDAL.Repositories
         {
             _context = context;
         }
-
+        public async Task<List<SavingGroupAccount>> GetAllSavingGroups()
+        {
+            return await _context.SavingGroupAccounts.ToListAsync();
+        }
         public async Task<SavingGroupResponseDto> RegisterSavingGroup(SavingGroupRegisterDto request)
         {
             try

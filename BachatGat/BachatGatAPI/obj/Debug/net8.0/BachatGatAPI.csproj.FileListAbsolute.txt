@@ -165,3 +165,11 @@ d:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\obj\Debug\net8.0\refint\Bac
 d:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\obj\Debug\net8.0\BachatGatAPI.pdb
 d:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\obj\Debug\net8.0\BachatGatAPI.genruntimeconfig.cache
 d:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\obj\Debug\net8.0\ref\BachatGatAPI.dll
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\BachatGatBGS.dll
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\BachatGatBGS.pdb

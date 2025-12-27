@@ -5,9 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BachatGatBGS\BachatGatBGS.csproj" />
     <ProjectReference Include="..\BachatGatDTO\BachatGatDTO.csproj" />
     <ProjectReference Include="..\BachatGatDAL\BachatGatDAL.csproj" />
     <ProjectReference Include="..\BachatGatBAL\BachatGatBAL.csproj" />
+    
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.9" />

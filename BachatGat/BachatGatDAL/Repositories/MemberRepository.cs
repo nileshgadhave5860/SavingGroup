@@ -109,7 +109,11 @@ namespace BachatGatDAL.Repositories
                 member.Address = request.Address;
                 member.MobileNo = request.MobileNo;
                 member.Email = request.Email;
-                member.Password = Encoding.UTF8.GetBytes(request.Password);
+                if(request.Password != null)
+                {
+ member.Password = Encoding.UTF8.GetBytes(request.Password);
+                }
+               
                 member.PaymentType = request.PaymentType;
                 member.Deposit = request.Deposit;
                 member.TotalSaving += request.Deposit;
