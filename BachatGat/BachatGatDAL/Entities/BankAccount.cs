@@ -15,7 +15,7 @@ namespace BachatGatDAL.Entities
         [ForeignKey("MonthMaster")]
         public int MonthId { get; set; }
 
-        public string Particulars { get; set; }
+        public string Particulars { get; set; } = null!;
         public decimal CrAmount { get; set; }
         public decimal DrAmount { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -23,7 +23,7 @@ namespace BachatGatDAL.Entities
         public Guid TransactionId { get; set; }
 
         // Navigation properties
-        public SavingGroupAccount SavingGroupAccount { get; set; }
-        public MonthMaster MonthMaster { get; set; }
+        public SavingGroupAccount SavingGroupAccount { get; set; } = null!;
+        public MonthMaster MonthMaster { get; set; } = null!;
     }
 }

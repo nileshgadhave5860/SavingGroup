@@ -19,42 +19,17 @@ namespace BachatGatDAL.Repositories
         {
             try
             {
-
-               bool CheckExist=_context.MonthMasters.Any(m => m.SGId == request.SGId && m.MonthNo == request.newMonthNo && m.YearNo == request.newYearNo);
-               if(!CheckExist)
-                {
-                // Get the last month for the saving group
-                var lastMonth = await _context.MonthMasters
+              DateTime date = new DateTime(request.newYearNo, request.newMonthNo, 1); 
+              DateTime PreMonthDate = date.AddMonths(-1);
+             var lastMonth = await _context.MonthMasters
                     .Where(m => m.SGId == request.SGId)
                     .OrderByDescending(m => m.YearNo)
                     .ThenByDescending(m => m.MonthNo)
                     .FirstOrDefaultAsync();
-                
-                
-               // string newMonthName;
- 
-               /* if (lastMonth == null)
+              bool PreCheckExist=_context.MonthMasters.Any(m => m.SGId == request.SGId && m.MonthNo == PreMonthDate.Month && m.YearNo == PreMonthDate.Year);
+              bool CurrentCheckExist=_context.MonthMasters.Any(m => m.SGId == request.SGId && m.MonthNo == request.newMonthNo && m.YearNo == request.newYearNo);
+               if(!CurrentCheckExist && lastMonth==null ||PreCheckExist )
                 {
-                    // First month for this saving group
-                    newMonthNo = 1;
-                    newYearNo = DateTime.Now.Year;
-                    newMonthName = GetMonthName(newMonthNo, newYearNo);
-                }
-                else
-                {
-                    // Calculate next month
-                    newMonthNo = lastMonth.MonthNo + 1;
-                    newYearNo = lastMonth.YearNo;
-
-                    if (newMonthNo > 12)
-                    {
-                        newMonthNo = 1;
-                        newYearNo++;
-                    }
-
-                    newMonthName = GetMonthName(newMonthNo, newYearNo);
-                }*/
-              DateTime date = new DateTime(request.newYearNo, request.newMonthNo, 1); 
               string newMonthName = date.ToString("MMM-yyyy");
                var newMonth = new MonthMaster
                 {
@@ -82,7 +57,7 @@ namespace BachatGatDAL.Repositories
                     decimal openingBalance = 0;
                     if (lastTransaction != null)
                     {
-                        openingBalance = lastTransaction.OutstandingSavingAmount + lastTransaction.CurrentSavingAmount - lastTransaction.DepositSavingAmount;
+                        openingBalance = (lastTransaction.OutstandingSavingAmount ?? 0) + (lastTransaction.CurrentSavingAmount ?? 0) - (lastTransaction.DepositSavingAmount ?? 0);
                     }
                     var newTransaction = new SavingTrasaction
                     {
@@ -102,13 +77,27 @@ namespace BachatGatDAL.Repositories
                      _context.SavingTrasactions.AddRange(savingTransactions);
                 }
                
-                
+                 await _context.SaveChangesAsync();
                 // Create interest transactions for each member
                 List<IntrestTrasaction> intrestTransactions = new List<IntrestTrasaction>();
                 foreach (var member in members)
                 {
                     if (member.TotalLoan > 0)
                     {
+                        var loansAccount = await _context.LoansAccounts
+                            .Where(la => la.MemberId == member.MemberId && la.LoanAmount - la.RepaymentAmount > 0)
+                            .Select(la=>new 
+                             {
+                                MemberId=la.MemberId,
+                                LoanAmount=la.LoanAmount - la.RepaymentAmount,
+                                RateOfIntrest=la.InterestRate 
+                            }).FirstOrDefaultAsync();
+                            
+                        if(loansAccount!=null)
+                        {
+                            
+                        
+                        
                         var lastIntrestTransaction = await _context.IntrestTrasactions
                             .Where(it => it.MemberId == member.MemberId && it.MonthId == newMonth.PreMonthId)
                             .FirstOrDefaultAsync();
@@ -123,52 +112,22 @@ namespace BachatGatDAL.Repositories
                             MonthId = newMonth.MonthId,
                             MemberId = member.MemberId,
                             OutstandingIntrestAmount = openingIntrestBalance,
-                            CurrentIntrestAmount = member.TotalLoan / 100 * sgdata.MonthlyRateOfIntrest,
+                            CurrentIntrestAmount =loansAccount.LoanAmount / 100 *(decimal) loansAccount.RateOfIntrest,
                             DepositIntrestAmount = 0,
                             Createddate = DateTime.Now
                         };
                         intrestTransactions.Add(newIntrestTransaction);
-                        
+                        }
                     }
                 }
+
                 if(intrestTransactions.Count>0)
                 {
                     _context.IntrestTrasactions.AddRange(intrestTransactions);
                 }
+                 await _context.SaveChangesAsync();
 
-                List<LoanTrasaction> loanTransactions = new List<LoanTrasaction>();
-                foreach (var member in members)
-                {
-                    if (member.TotalLoan > 0)
-                    {
-                        var lastLoanTransaction = await _context.LoanTrasactions
-                            .Where(lt => lt.MemberId == member.MemberId && lt.MonthId == newMonth.PreMonthId)
-                            .FirstOrDefaultAsync();
-                        decimal previousLoanAmount = 0;
-                        if (lastLoanTransaction != null)
-                        {
-                            previousLoanAmount = lastLoanTransaction.PreviousLoanAmount + lastLoanTransaction.CurrentLoanAmount - lastLoanTransaction.RepaidLoanAmount;
-                        }
-                        var newLoanTransaction = new LoanTrasaction
-                        {
-                            SGId = request.SGId,
-                            MonthId = newMonth.MonthId,
-                            MemberId = member.MemberId,
-                            PreviousLoanAmount = previousLoanAmount,
-                            CurrentLoanAmount = 0,
-                            RepaidLoanAmount = 0,
-                            Createddate = DateTime.Now
-                        };
-                        loanTransactions.Add(newLoanTransaction);
-
-                    }
-                }
-
-                if(loanTransactions.Count > 0)
-                {
-                    _context.LoanTrasactions.AddRange(loanTransactions);
-                }
-                await _context.SaveChangesAsync();
+               
 
 
                 return new CreateMonthResponseDto
@@ -238,6 +197,43 @@ namespace BachatGatDAL.Repositories
                 {
                     Success = false,
                     Message = $"Error retrieving last month: {ex.Message}"
+                };
+            }
+        }
+
+        public async Task<GetMonthBySGIdResponseDto> GetMonthBySGId(int sgId)
+        {
+            try
+            {
+                var months = await _context.MonthMasters
+                    .Where(m => m.SGId == sgId)
+                    .OrderByDescending(m => m.YearNo)
+                    .ThenByDescending(m => m.MonthNo)
+                    .Select(m => new MonthDto
+                    {
+                        MonthId = m.MonthId,
+                        SGId = m.SGId,
+                        MonthName = m.MonthName,
+                        MonthNo = m.MonthNo,
+                        YearNo = m.YearNo,
+                        CreatedDate = m.Createddate
+                    })
+                    .ToListAsync();
+
+                return new GetMonthBySGIdResponseDto
+                {
+                    Months = months,
+                    Success = true,
+                    Message = months.Count > 0 ? "Months retrieved successfully" : "No months found for this saving group"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new GetMonthBySGIdResponseDto
+                {
+                    Months = new List<MonthDto>(),
+                    Success = false,
+                    Message = $"Error retrieving months: {ex.Message}"
                 };
             }
         }

@@ -6,5 +6,6 @@ namespace BachatGatBAL.Interfaces
     {
         Task<CreateMonthResponseDto> CreateMonth(CreateMonthDto request);
         Task<GetLastMonthResponseDto> GetLastMonth(int sgId);
+        Task<GetMonthBySGIdResponseDto> GetMonthBySGId(int sgId);
     }
 }

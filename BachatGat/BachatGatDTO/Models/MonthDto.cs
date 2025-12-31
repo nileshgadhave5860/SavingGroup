@@ -4,7 +4,7 @@ namespace BachatGatDTO.Models
     {
         public int MonthId { get; set; }
         public int SGId { get; set; }
-        public string MonthName { get; set; }
+        public string MonthName { get; set; } = null!;
         public int MonthNo { get; set; }
         public int YearNo { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -20,22 +20,29 @@ namespace BachatGatDTO.Models
     public class CreateMonthResponseDto
     {
         public int MonthId { get; set; }
-        public string MonthName { get; set; }
+        public string MonthName { get; set; } = null!;
         public int MonthNo { get; set; }
         public int YearNo { get; set; }
         public bool Success { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; } = null!;
     }
 
     public class GetLastMonthResponseDto
     {
         public int MonthId { get; set; }
         public int SGId { get; set; }
-        public string MonthName { get; set; }
+        public string MonthName { get; set; } = null!;
         public int MonthNo { get; set; }
         public int YearNo { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool Success { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; } = null!;
+    }
+
+    public class GetMonthBySGIdResponseDto
+    {
+        public List<MonthDto> Months { get; set; } = null!;
+        public bool Success { get; set; }
+        public string Message { get; set; } = null!;
     }
 }

@@ -109,5 +109,143 @@ namespace BachatGatDAL.Repositories
                 throw new Exception($"Error authenticating saving group: {ex.Message}");
             }
         }
+
+
+        public async Task<SavingGroupdashboardDto> GetSavingGroupDashboardData(int sgId)
+        {
+            var totalMembers = await _context.Members.CountAsync(m => m.SGId == sgId && m.IsActive);
+
+            var totalDeposit=await _context.Members
+                .Where(m => m.SGId == sgId && m.IsActive)
+                .SumAsync(m => (decimal?)m.Deposit) ?? 0 ;
+            var totalSavings = await _context.SavingTrasactions.Include(x=> x.Member)
+                .Where(st => st.SGId == sgId)
+                .SumAsync(st => (decimal?)st.DepositSavingAmount) ?? 0 ;
+
+
+            var totalIntrest = await _context.IntrestTrasactions
+                .Where(lt => lt.SGId == sgId)
+                .SumAsync(lt => (decimal?)lt.DepositIntrestAmount) ?? 0;  
+
+            var TotalLoans = await _context.LoansAccounts
+                .Where(lt => lt.SGId == sgId)
+                .SumAsync(lt => (decimal?)lt.LoanAmount-(decimal?)lt.RepaymentAmount) ?? 0;
+
+            
+            var CashBalance=await _context.CashAccounts
+                .Where(cb => cb.SGId == sgId)
+                .SumAsync(cb => (decimal?)cb.DrAmount-(decimal?)cb.CrAmount) ?? 0;
+
+            var BankBalance = await _context.BankAccounts
+                .Where(bb => bb.SGId == sgId)
+                .SumAsync(bb => (decimal?)bb.DrAmount - (decimal?)bb.CrAmount) ?? 0;
+
+
+           var SavingPendingMembersCount = await _context.SavingTrasactions
+    .Where(sp => sp.SGId == sgId 
+        && ((sp.CurrentSavingAmount ?? 0) - (sp.DepositSavingAmount ?? 0)) > 0)
+    .Select(sp => sp.MemberId)
+    .Distinct()
+    .CountAsync();
+
+            var SavingPendingAmount = await _context.SavingTrasactions
+                .Where(sp => sp.SGId == sgId && (sp.CurrentSavingAmount ?? 0) - (sp.DepositSavingAmount ?? 0)> 0)
+                .SumAsync(sp => (decimal?)((sp.CurrentSavingAmount ?? 0) - (sp.DepositSavingAmount ?? 0))) ?? 0;
+              
+            var IntrestPendingMembersCount=await _context.IntrestTrasactions
+                .Where(ip => ip.SGId == sgId && ip.CurrentIntrestAmount - ip.DepositIntrestAmount > 0)
+                .Select(ip => ip.MemberId)
+                .Distinct()
+                .CountAsync();
+
+             var IntrestPendingAmount = await _context.IntrestTrasactions
+                .Where(ip => ip.SGId == sgId && ip.CurrentIntrestAmount - ip.DepositIntrestAmount > 0)
+                .SumAsync(ip => (decimal?)(ip.CurrentIntrestAmount - ip.DepositIntrestAmount)) ?? 0;   
+             var SGName= await _context.SavingGroupAccounts
+                .Where(sg => sg.SGId == sgId)
+                .Select(sg => sg.SGName)
+                .FirstOrDefaultAsync() ?? string.Empty;
+
+             decimal TotalIncome = 0; // Placeholder for total income calculation
+             decimal TotalExpenses = 0; // Placeholder for total expenses calculation
+
+            var dashboardData = new SavingGroupdashboardDto
+            {   SGId = sgId,
+                SGName=SGName,
+                TotalMembers = totalMembers,
+                TotalSavings = totalSavings+ totalDeposit,
+                TotalInterestEarned = totalIntrest,
+                TotalLoans = TotalLoans,
+                CashBalance = CashBalance,
+                BankBalance = BankBalance,
+                TotalLateFeesCollected=0,
+                TotalIncome=TotalIncome,
+                TotalExpenses=TotalExpenses,
+                SavingPendingMembersCount=SavingPendingMembersCount,
+                SavingPendingAmount=SavingPendingAmount,
+                IntrestPendingMembersCount=IntrestPendingMembersCount,
+                IntrestPendingAmount=IntrestPendingAmount,
+                LateFeesPendingMembersCount=0,
+                LateFeesPendingAmount=0,
+                SavingsBalance = totalSavings+ totalDeposit + totalIntrest - TotalLoans + TotalIncome - TotalExpenses
+
+            };
+            return dashboardData;
+        }
+        public async Task<MemberDashboardDto> GetMemberDashboardData(int sgId, int memberId)
+        {
+
+            var Memberdata= await _context.Members
+                .Where(m => m.SGId == sgId && m.MemberId==memberId)                
+                .FirstOrDefaultAsync();
+
+            if (Memberdata == null)
+            {
+                return new MemberDashboardDto 
+                { 
+                    MemberId = memberId,
+                    FullName = string.Empty,
+                    SavingPendingMonthsCount = 0,
+                    SavingPendingAmount = 0,
+                    IntrestPendingAmount = 0,
+                    IntrestPendingMonthsCount = 0,
+                    LateFeesPendingAmount = 0,
+                    TotalLoan = 0,
+                    TotalSavings = 0,
+                    SavingGroupDetails = new SavingGroupdashboardDto()
+                };
+            }
+
+             var savingPendingMonthsCount = await _context.SavingTrasactions
+                .Where(st => st.SGId == sgId && st.MemberId == memberId && st.CurrentSavingAmount - st.DepositSavingAmount > 0)
+                .CountAsync();
+                var savingPendingAmount = await _context.SavingTrasactions
+                .Where(st => st.SGId == sgId && st.MemberId == memberId && st.CurrentSavingAmount - st.DepositSavingAmount > 0)
+                .SumAsync(st => (decimal?)(st.CurrentSavingAmount - st.DepositSavingAmount)) ?? 0;
+              var intrestPendingMonthsCount = await _context.IntrestTrasactions
+                .Where(it => it.SGId == sgId && it.MemberId == memberId && it.CurrentIntrestAmount - it.DepositIntrestAmount > 0)
+                .CountAsync();
+            var intrestPendingAmount = await _context.IntrestTrasactions
+                .Where(it => it.SGId == sgId && it.MemberId == memberId && it.CurrentIntrestAmount - it.DepositIntrestAmount > 0)
+                .SumAsync(it => (decimal?)(it.CurrentIntrestAmount - it.DepositIntrestAmount)) ?? 0;
+
+
+            var MemberDashboard=new MemberDashboardDto()
+            {
+                MemberId=memberId,
+                FullName=Memberdata.FullName,
+                SavingPendingMonthsCount=savingPendingMonthsCount,
+                SavingPendingAmount=savingPendingAmount,
+                 IntrestPendingAmount=intrestPendingAmount,
+                IntrestPendingMonthsCount=intrestPendingMonthsCount,
+                LateFeesPendingAmount=0,
+                TotalLoan=Memberdata.TotalLoan,
+                TotalSavings=Memberdata.TotalSaving+Memberdata.Deposit,
+
+                SavingGroupDetails = await GetSavingGroupDashboardData(sgId)
+            };
+            return MemberDashboard;
+        }
+
     }
 }

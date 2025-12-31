@@ -20,15 +20,15 @@ namespace BachatGatDAL.Entities
 
         public Guid? TrasactionId { get; set; }
         public int? PaymentType { get; set; }
-        public decimal OutstandingSavingAmount { get; set; }
-        public decimal CurrentSavingAmount { get; set; }
-        public decimal DepositSavingAmount { get; set; }
+        public decimal? OutstandingSavingAmount { get; set; }
+        public decimal? CurrentSavingAmount { get; set; }
+        public decimal? DepositSavingAmount { get; set; }
         public DateTime Createddate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
         // Navigation properties
-        public SavingGroupAccount SavingGroupAccount { get; set; }
-        public MonthMaster MonthMaster { get; set; }
-        public Member Member { get; set; }
+        public SavingGroupAccount SavingGroupAccount { get; set; } = null!;
+        public MonthMaster MonthMaster { get; set; } = null!;
+        public Member Member { get; set; } = null!;
     }
 }

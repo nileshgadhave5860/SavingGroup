@@ -22,9 +22,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("http://localhost:3000")
+        builder.WithOrigins("http://localhost:3000", "https://localhost:3000")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .AllowCredentials();
                
     });
 });
@@ -47,49 +48,33 @@ builder.Services.AddScoped<ISavingGroupService, SavingGroupService>();
 // Register Month services
 builder.Services.AddScoped<IMonthRepository, MonthRepository>();
 builder.Services.AddScoped<IMonthService, MonthService>();
+// Register IntrestTrasaction services
+builder.Services.AddScoped<IIntrestTrasactionSerivce, IntrestTrasactionSerivce>();
+builder.Services.AddScoped<IIntrestTrasactionRepository, IntrestTrasactionRepository>();
+// Register SavingTrasaction services   
+builder.Services.AddScoped<ISavingTrasactionService, SavingTrasactionService>();
+builder.Services.AddScoped<ISavingTrasactionRepository, SavingTrasactionRepository>();
+// Register LoansAccount services
+builder.Services.AddScoped<ILoansAccountService, LoansAccountService>();
+builder.Services.AddScoped<ILoansAccountRepository, LoansAccountRepository>();
 builder.Services.AddHostedService<MonthCreateService>();
 // Register AppDbContext using connection string from configuration
 
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Enable Swagger UI so the API's documentation is reachable when running locally
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+app.UseHttpsRedirection();
 app.UseAuthorization();
+
 app.MapControllers();
 
-await app.StartAsync();
-
-try
-{
-    var url = app.Urls.FirstOrDefault();
-    if (string.IsNullOrWhiteSpace(url))
-    {
-        var server = app.Services.GetService<IServer>();
-        var addressesFeature = server?.Features.Get<IServerAddressesFeature>();
-        url = addressesFeature?.Addresses.FirstOrDefault();
-    }
-
-    if (string.IsNullOrWhiteSpace(url))
-    {
-        url = builder.Configuration["urls"];
-    }
-
-    if (string.IsNullOrWhiteSpace(url))
-    {
-        url = "http://localhost:5000";
-    }
-
-    var swaggerUrl = url.TrimEnd('/') + "/swagger/index.html";
-    Process.Start(new ProcessStartInfo { FileName = swaggerUrl, UseShellExecute = true });
-}
-catch
-{
-    // ignore any failures to launch browser
-}
-
-await app.WaitForShutdownAsync();
+app.Run();

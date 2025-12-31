@@ -15,6 +15,8 @@ namespace BachatGatDAL.Data
         public DbSet<SavingTrasaction> SavingTrasactions { get; set; } = null!;
         public DbSet<IntrestTrasaction> IntrestTrasactions { get; set; } = null!;
         public DbSet<LoanTrasaction> LoanTrasactions { get; set; } = null!;
+
+        public DbSet<LoansAccount> LoansAccounts { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
          

@@ -22,5 +22,15 @@ namespace BachatGatBAL.Services
         {
             return await _repository.Authenticate(request);
         }
+
+        public async Task<SavingGroupdashboardDto> GetSavingGroupDashboardData(int sgId)
+        {
+            return await _repository.GetSavingGroupDashboardData(sgId);
+        }
+
+        public Task<MemberDashboardDto> GetMemberDashboardData(int sgId, int memberId)
+        {
+            return _repository.GetMemberDashboardData(sgId, memberId);
+        }
     }
 }

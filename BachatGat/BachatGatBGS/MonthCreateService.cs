@@ -52,7 +52,7 @@ public class MonthCreateService : BackgroundService
             if (sg.MonthStartDate == DateTime.Now.Day)
             {
                 var monthRequest = new CreateMonthDto 
-                { SGId = sg.SGId ,
+                {   SGId = sg.SGId ,
                     newMonthNo= DateTime.Now.Month,
                     newYearNo= DateTime.Now.Year
                 };

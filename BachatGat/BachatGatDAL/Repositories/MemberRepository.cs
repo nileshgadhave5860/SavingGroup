@@ -76,6 +76,25 @@ namespace BachatGatDAL.Repositories
 
                 await _context.SaveChangesAsync();
 
+                
+                var sgdata = await _context.SavingGroupAccounts.FirstOrDefaultAsync(sg => sg.SGId == request.SGId);
+                if (sgdata != null)
+                {
+                  var savingTransactions = new SavingTrasaction
+                    {
+                        SGId = request.SGId,
+                        MemberId = member.MemberId,                        
+                        MonthId = request.MonthId,
+                        CurrentSavingAmount = sgdata.MonthlySavingAmount,
+                        DepositSavingAmount = 0,
+                        OutstandingSavingAmount = 0,
+                        Createddate = DateTime.Now
+                    };
+                   await _context.SavingTrasactions.AddAsync(savingTransactions);
+                    await _context.SaveChangesAsync();
+                }
+
+
                 return new CreateMemberResponseDto
                 {
                     MemberId = member.MemberId,
@@ -121,7 +140,7 @@ namespace BachatGatDAL.Repositories
                 _context.Members.Update(member);
                 await _context.SaveChangesAsync();
 
-                // Use existing TransactionId
+             
                 var transactionId = member.TransactionId;
 
                 // If payment type is same, update existing account record
@@ -235,6 +254,8 @@ namespace BachatGatDAL.Repositories
                         _context.BankAccounts.Add(bankAccount);
                     }
                 }
+
+
 
                 await _context.SaveChangesAsync();
 

@@ -22,5 +22,10 @@ namespace BachatGatBAL.Services
         {
             return await _repository.GetLastMonth(sgId);
         }
+
+        public async Task<GetMonthBySGIdResponseDto> GetMonthBySGId(int sgId)
+        {
+            return await _repository.GetMonthBySGId(sgId);
+        }
     }
 }

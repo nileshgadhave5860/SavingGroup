@@ -2,11 +2,11 @@ namespace BachatGatDTO.Models
 {
     public class SavingGroupRegisterDto
     {
-        public string SGName { get; set; }
-        public string SGAddress { get; set; }
-        public string SGMobileNo { get; set; }
-        public string SGEmailId { get; set; }
-        public string SGPassword { get; set; }
+        public string SGName { get; set; } = null!;
+        public string SGAddress { get; set; } = null!;
+        public string SGMobileNo { get; set; } = null!;
+        public string SGEmailId { get; set; } = null!;
+        public string SGPassword { get; set; } = null!;
         public int MonthStartDate { get; set; }
         public int MonthEndDate { get; set; }
         public decimal MonthlySavingAmount { get; set; }
@@ -20,14 +20,14 @@ namespace BachatGatDTO.Models
     {
         public int SGId { get; set; }
         public int MonthId { get; set; }
-        public string SGName { get; set; }
-        public string Message { get; set; }
+        public string SGName { get; set; } = null!;
+        public string Message { get; set; } = null!;
     }
 
     public class SavingGroupLoginDto
     {
-        public string SGMobileNo { get; set; }
-        public string SGPassword { get; set; }
+        public string SGMobileNo { get; set; } = null!;
+        public string SGPassword { get; set; } = null!;
     }
 
     public class SavingGroupLoginResponseDto
@@ -35,10 +35,10 @@ namespace BachatGatDTO.Models
         public int SGId { get; set; }
         public int MonthId { get; set; }
         public int? MemberId { get; set; }
-        public string SGName { get; set; }
+        public string SGName { get; set; } = null!;
         public bool Success { get; set; }
-        public string Message { get; set; }
-        public string Token { get; set; }
+        public string Message { get; set; } = null!;
+        public string Token { get; set; } = null!;
     }
 
     public class AuthResponseDto
@@ -46,20 +46,36 @@ namespace BachatGatDTO.Models
         public int? SGId { get; set; }
         public int? MonthId { get; set; }
         public int? MemberId { get; set; }
-        public string Name { get; set; }
-        public string Role { get; set; }
+        public string Name { get; set; } = null!;
+        public string Role { get; set; } = null!;
         public bool Success { get; set; }
-        public string Message { get; set; }
-        public string Token { get; set; }
+        public string Message { get; set; } = null!;
+        public string Token { get; set; } = null!;
     }
 
     public class AuthRequestDto
     {
         public bool IsMemberLogin { get; set; }        
         public int? SGId { get; set; }
-        public string MobileNo { get; set; }
-        public string Password { get; set; }
+        public string MobileNo { get; set; } = null!;
+        public string Password { get; set; } = null!;
 
         
+    }
+    public class dashboardDto
+    {
+        public int TotalMembers { get; set; }
+        public decimal TotalSavings { get; set; }
+        public decimal TotalLoans { get; set; }
+        public decimal TotalInterestEarned { get; set; }
+        public decimal CashBalance { get; set; }
+        public decimal BankBalance { get; set; }
+        public decimal TotalLateFeesCollected { get; set; }
+        public decimal TotalExpenses { get; set; }
+        public decimal TotalIncome { get; set; }
+
+
+
+
     }
 }

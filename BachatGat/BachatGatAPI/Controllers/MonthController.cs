@@ -51,5 +51,22 @@ namespace BachatGatAPI.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpGet("GetMonthBySGId/{sgId}")]
+        public async Task<ActionResult<GetMonthBySGIdResponseDto>> GetMonthBySGId(int sgId)
+        {
+            try
+            {
+                var result = await _service.GetMonthBySGId(sgId);
+                if (!result.Success)
+                    return BadRequest(result);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }
