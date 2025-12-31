@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj": {}
+    "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj": {}
   },
   "projects": {
-    "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj": {
+    "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj",
+        "projectUniqueName": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj",
         "projectName": "BachatGatBGS",
-        "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj",
+        "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj",
         "packagesPath": "C:\\Users\\nilsi\\.nuget\\packages\\",
-        "outputPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\obj\\",
+        "outputPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -109,8 +109,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj": {
-                "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj"
+              "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj": {
+                "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj"
               }
             }
           }
@@ -162,14 +162,14 @@
         }
       }
     },
-    "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj": {
+    "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj",
+        "projectUniqueName": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj",
         "projectName": "BachatGatDTO",
-        "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj",
+        "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj",
         "packagesPath": "C:\\Users\\nilsi\\.nuget\\packages\\",
-        "outputPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\obj\\",
+        "outputPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

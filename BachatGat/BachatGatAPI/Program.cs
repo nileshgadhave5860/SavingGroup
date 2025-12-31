@@ -57,6 +57,12 @@ builder.Services.AddScoped<ISavingTrasactionRepository, SavingTrasactionReposito
 // Register LoansAccount services
 builder.Services.AddScoped<ILoansAccountService, LoansAccountService>();
 builder.Services.AddScoped<ILoansAccountRepository, LoansAccountRepository>();
+// Register LoanTrasaction services
+builder.Services.AddScoped<ILoanTrasactionService, LoanTrasactionService>();
+builder.Services.AddScoped<ILoanTrasactionRepository, LoanTrasactionRepository>();
+// Register Bank services
+builder.Services.AddScoped<IBankService, BankService>();
+builder.Services.AddScoped<IBankRepository, BankRepository>();
 builder.Services.AddHostedService<MonthCreateService>();
 // Register AppDbContext using connection string from configuration
 

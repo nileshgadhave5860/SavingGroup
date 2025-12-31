@@ -3413,11 +3413,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
+      "projectUniqueName": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
       "projectName": "BachatGatAPI",
-      "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
+      "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\BachatGatAPI.csproj",
       "packagesPath": "C:\\Users\\nilsi\\.nuget\\packages\\",
-      "outputPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\obj\\",
+      "outputPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3442,14 +3442,14 @@
             "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBAL\\BachatGatBAL.csproj": {
               "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBAL\\BachatGatBAL.csproj"
             },
-            "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj": {
-              "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj"
+            "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj": {
+              "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj"
             },
             "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj": {
               "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj"
             },
-            "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj": {
-              "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj"
+            "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj": {
+              "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj"
             }
           }
         }

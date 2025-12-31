@@ -13,18 +13,22 @@ namespace BachatGatDAL.Entities
     {
         [Key]
         public int LTId { get; set; }
+        [ForeignKey("SavingGroupAccount")]
         public int SGId { get; set; }
+        [ForeignKey("MonthMaster")]
         public int MonthId { get; set; }
+        [ForeignKey("Member")]
         public int MemberId { get; set; }
-        public decimal PreviousLoanAmount { get; set; }=0;
-        public decimal CurrentLoanAmount { get; set; }=0;
-        public Guid? CurrentTrasactionId { get; set; }
-        public int? CurrentLoanPaymentType { get; set; }
-        public DateTime? CurrentLoanDate { get; set; }
-        public decimal RepaidLoanAmount { get; set; }=0;
-        public Guid? RepaidTrasactionId { get; set; }
-        public int? RepaidPaymentType { get; set; }
-        public DateTime? RepaidDate { get; set; }
+        [ForeignKey("LoansAccount")]
+        public int LoanId { get; set; }
+        public int PaymentType { get; set; }
+        public decimal RepaidLoanAmount { get; set; }
+        public Guid TrasactionId { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public DateTime Createddate { get; set; }
+        public SavingGroupAccount SavingGroupAccount { get; set; } = null!;
+        public MonthMaster MonthMaster { get; set; } = null!;
+        public Member Member { get; set; } = null!;
+        public LoansAccount LoansAccount { get; set; } = null!;
     }
 }
