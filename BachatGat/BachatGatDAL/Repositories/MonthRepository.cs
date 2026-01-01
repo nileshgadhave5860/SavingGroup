@@ -14,133 +14,239 @@ namespace BachatGatDAL.Repositories
         {
             _context = context;
         }
+public async Task<CreateMonthResponseDto> CreateMonth(CreateMonthDto request)
+{
+    await using var transaction = await _context.Database.BeginTransactionAsync();
+    try
+    {
+        DateTime date = new DateTime(request.newYearNo, request.newMonthNo, 1);
+        DateTime preMonthDate = date.AddMonths(-1);
 
-        public async Task<CreateMonthResponseDto> CreateMonth(CreateMonthDto request)
+        var lastMonth = await _context.MonthMasters
+            .Where(m => m.SGId == request.SGId)
+            .OrderByDescending(m => m.YearNo)
+            .ThenByDescending(m => m.MonthNo)
+            .FirstOrDefaultAsync();
+
+        bool preCheckExist = await _context.MonthMasters
+            .AnyAsync(m => m.SGId == request.SGId && m.MonthNo == preMonthDate.Month && m.YearNo == preMonthDate.Year);
+
+        bool currentCheckExist = await _context.MonthMasters
+            .AnyAsync(m => m.SGId == request.SGId && m.MonthNo == request.newMonthNo && m.YearNo == request.newYearNo);
+
+        if (!currentCheckExist && (lastMonth == null || preCheckExist))
         {
-            try
+            string newMonthName = date.ToString("MMM-yyyy");
+            var newMonth = new MonthMaster
             {
-              DateTime date = new DateTime(request.newYearNo, request.newMonthNo, 1); 
-              DateTime PreMonthDate = date.AddMonths(-1);
-             var lastMonth = await _context.MonthMasters
-                    .Where(m => m.SGId == request.SGId)
-                    .OrderByDescending(m => m.YearNo)
-                    .ThenByDescending(m => m.MonthNo)
-                    .FirstOrDefaultAsync();
-              bool PreCheckExist=_context.MonthMasters.Any(m => m.SGId == request.SGId && m.MonthNo == PreMonthDate.Month && m.YearNo == PreMonthDate.Year);
-              bool CurrentCheckExist=_context.MonthMasters.Any(m => m.SGId == request.SGId && m.MonthNo == request.newMonthNo && m.YearNo == request.newYearNo);
-               if(!CurrentCheckExist && lastMonth==null ||PreCheckExist )
-                {
-              string newMonthName = date.ToString("MMM-yyyy");
-               var newMonth = new MonthMaster
-                {
-                    SGId = request.SGId,
-                    PreMonthId = lastMonth?.MonthId ?? 0,
-                    MonthName = newMonthName,
-                    MonthNo = request.newMonthNo,
-                    YearNo = request.newYearNo,
-                    Createddate = DateTime.Now
-                };
-              await _context.MonthMasters.AddAsync(newMonth);
-                 await _context.SaveChangesAsync();
+                SGId = request.SGId,
+                PreMonthId = lastMonth?.MonthId ?? 0,
+                MonthName = newMonthName,
+                MonthNo = request.newMonthNo,
+                YearNo = request.newYearNo,
+                Createddate = DateTime.Now
+            };
 
+            await _context.MonthMasters.AddAsync(newMonth);
+            await _context.SaveChangesAsync();
 
-                var sgdata=await _context.SavingGroupAccounts.FirstOrDefaultAsync(sg=>sg.SGId==request.SGId);
-                var members=await _context.Members.Where(m=>m.SGId==request.SGId && m.IsActive).ToListAsync();
+            var members = await _context.Members
+                .Where(m => m.SGId == request.SGId && m.IsActive)
+                .ToListAsync();
 
-                // Create saving transactions for each member
-                List<SavingTrasaction> savingTransactions = new List<SavingTrasaction>();
-                foreach (var member in members)
-                {
-                    var lastTransaction = await _context.SavingTrasactions
-                        .Where(st => st.MemberId == member.MemberId && st.MonthId == newMonth.PreMonthId)
-                        .FirstOrDefaultAsync();
-                    decimal openingBalance = 0;
-                    if (lastTransaction != null)
+            decimal monthlySavingAmount = await _context.SavingGroupAccounts
+                .Where(sg => sg.SGId == request.SGId)
+                .Select(sg => sg.MonthlySavingAmount)
+                .FirstOrDefaultAsync();
+
+            // Saving Transactions
+            var savingTransactions = members.Select(member => new SavingTrasaction
+            {
+                SGId = request.SGId,
+                MonthId = newMonth.MonthId,
+                MemberId = member.MemberId,
+                OutstandingSavingAmount = 0,
+                CurrentSavingAmount = monthlySavingAmount,
+                DepositSavingAmount = 0,
+                Createddate = DateTime.Now
+            }).ToList();
+
+            if (savingTransactions.Any())
+                await _context.SavingTrasactions.AddRangeAsync(savingTransactions);
+
+            await _context.SaveChangesAsync();
+
+            // Interest Transactions
+            var interestTransactions = new List<IntrestTrasaction>();
+            foreach (var member in members)
+            {
+                var loansAccount = await _context.LoansAccounts
+                    .Where(la => la.MemberId == member.MemberId && la.LoanAmount - la.RepaymentAmount > 0)
+                    .Select(la => new
                     {
-                        openingBalance = (lastTransaction.OutstandingSavingAmount ?? 0) + (lastTransaction.CurrentSavingAmount ?? 0) - (lastTransaction.DepositSavingAmount ?? 0);
-                    }
-                    var newTransaction = new SavingTrasaction
+                        MemberId = la.MemberId,
+                        LoanAmount = la.LoanAmount - la.RepaymentAmount,
+                        RateOfIntrest = la.InterestRate
+                    }).FirstOrDefaultAsync();
+
+                if (loansAccount != null && loansAccount.LoanAmount > 0)
+                {
+                    interestTransactions.Add(new IntrestTrasaction
                     {
                         SGId = request.SGId,
                         MonthId = newMonth.MonthId,
                         MemberId = member.MemberId,
-                        OutstandingSavingAmount= openingBalance,
-                        CurrentSavingAmount=sgdata?.MonthlySavingAmount??0,
-                         DepositSavingAmount=0,
-                         Createddate = DateTime.Now
-                          
-                    };
-                    savingTransactions.Add(newTransaction);
+                        OutstandingIntrestAmount = 0,
+                        CurrentIntrestAmount = loansAccount.LoanAmount / 100 * (decimal)loansAccount.RateOfIntrest,
+                        DepositIntrestAmount = 0,
+                        Createddate = DateTime.Now
+                    });
                 }
-                if (savingTransactions.Count > 0)
+            }
+
+            if (interestTransactions.Any())
+                await _context.IntrestTrasactions.AddRangeAsync(interestTransactions);
+
+            await _context.SaveChangesAsync();
+
+            // Commit transaction
+            await transaction.CommitAsync();
+
+            return new CreateMonthResponseDto
+            {
+                MonthId = newMonth.MonthId,
+                MonthName = newMonth.MonthName,
+                MonthNo = newMonth.MonthNo,
+                YearNo = newMonth.YearNo,
+                Success = true,
+                Message = "Month created successfully"
+            };
+        }
+        else
+        {
+            return new CreateMonthResponseDto
+            {
+                Success = false,
+                Message = "Month already exists for this saving group"
+            };
+        }
+    }
+    catch (Exception ex)
+    {
+        await transaction.RollbackAsync();
+        return new CreateMonthResponseDto
+        {
+            Success = false,
+            Message = $"Error creating month: {ex.Message}"
+        };
+    }
+}
+
+       /* public async Task<CreateMonthResponseDto> CreateMonth(CreateMonthDto request)
+        {
+            try
+            {
+                DateTime date = new DateTime(request.newYearNo, request.newMonthNo, 1);
+                DateTime PreMonthDate = date.AddMonths(-1);
+                var lastMonth = await _context.MonthMasters
+                       .Where(m => m.SGId == request.SGId)
+                       .OrderByDescending(m => m.YearNo)
+                       .ThenByDescending(m => m.MonthNo)
+                       .FirstOrDefaultAsync();
+                bool PreCheckExist = _context.MonthMasters.Any(m => m.SGId == request.SGId && m.MonthNo == PreMonthDate.Month && m.YearNo == PreMonthDate.Year);
+                bool CurrentCheckExist = _context.MonthMasters.Any(m => m.SGId == request.SGId && m.MonthNo == request.newMonthNo && m.YearNo == request.newYearNo);
+
+                if (!CurrentCheckExist && (lastMonth == null || PreCheckExist))
                 {
-                     _context.SavingTrasactions.AddRange(savingTransactions);
-                }
-               
-                 await _context.SaveChangesAsync();
-                // Create interest transactions for each member
-                List<IntrestTrasaction> intrestTransactions = new List<IntrestTrasaction>();
-                foreach (var member in members)
-                {
-                    if (member.TotalLoan > 0)
+                    string newMonthName = date.ToString("MMM-yyyy");
+                    var newMonth = new MonthMaster
                     {
-                        var loansAccount = await _context.LoansAccounts
-                            .Where(la => la.MemberId == member.MemberId && la.LoanAmount - la.RepaymentAmount > 0)
-                            .Select(la=>new 
-                             {
-                                MemberId=la.MemberId,
-                                LoanAmount=la.LoanAmount - la.RepaymentAmount,
-                                RateOfIntrest=la.InterestRate 
-                            }).FirstOrDefaultAsync();
-                            
-                        if(loansAccount!=null)
-                        {
-                            
-                        
-                        
-                        var lastIntrestTransaction = await _context.IntrestTrasactions
-                            .Where(it => it.MemberId == member.MemberId && it.MonthId == newMonth.PreMonthId)
-                            .FirstOrDefaultAsync();
-                        decimal openingIntrestBalance = 0;
-                        if (lastIntrestTransaction != null)
-                        {
-                            openingIntrestBalance = lastIntrestTransaction.OutstandingIntrestAmount + lastIntrestTransaction.CurrentIntrestAmount - lastIntrestTransaction.DepositIntrestAmount;
-                        }
-                        var newIntrestTransaction = new IntrestTrasaction
+                        SGId = request.SGId,
+                        PreMonthId = lastMonth?.MonthId ?? 0,
+                        MonthName = newMonthName,
+                        MonthNo = request.newMonthNo,
+                        YearNo = request.newYearNo,
+                        Createddate = DateTime.Now
+                    };
+                    await _context.MonthMasters.AddAsync(newMonth);
+                    await _context.SaveChangesAsync();
+                    var members = await _context.Members.Where(m => m.SGId == request.SGId && m.IsActive).ToListAsync();
+
+                    decimal MonthlySavingAmount = await _context.SavingGroupAccounts
+                        .Where(sg => sg.SGId == request.SGId)
+                        .Select(sg => sg.MonthlySavingAmount)
+                        .FirstOrDefaultAsync();
+
+                    List<SavingTrasaction> savingTransactions = new List<SavingTrasaction>();
+                    foreach (var member in members)
+                    {
+
+                        var newTransaction = new SavingTrasaction
                         {
                             SGId = request.SGId,
                             MonthId = newMonth.MonthId,
                             MemberId = member.MemberId,
-                            OutstandingIntrestAmount = openingIntrestBalance,
-                            CurrentIntrestAmount =loansAccount.LoanAmount / 100 *(decimal) loansAccount.RateOfIntrest,
-                            DepositIntrestAmount = 0,
+                            OutstandingSavingAmount = 0,
+                            CurrentSavingAmount = MonthlySavingAmount,
+                            DepositSavingAmount = 0,
                             Createddate = DateTime.Now
+
                         };
-                        intrestTransactions.Add(newIntrestTransaction);
-                        }
+                        savingTransactions.Add(newTransaction);
                     }
+                    if (savingTransactions.Count > 0)
+                    {
+                        _context.SavingTrasactions.AddRange(savingTransactions);
+                    }
+
+                    await _context.SaveChangesAsync();
+                    // Create interest transactions for each member
+                    List<IntrestTrasaction> intrestTransactions = new List<IntrestTrasaction>();
+                    foreach (var member in members)
+                    {
+
+                        var loansAccount = await _context.LoansAccounts
+                            .Where(la => la.MemberId == member.MemberId && la.LoanAmount - la.RepaymentAmount > 0)
+                            .Select(la => new
+                            {
+                                MemberId = la.MemberId,
+                                LoanAmount = la.LoanAmount - la.RepaymentAmount,
+                                RateOfIntrest = la.InterestRate
+                            }).FirstOrDefaultAsync();
+
+                        if (loansAccount != null && loansAccount.LoanAmount > 0)
+                        {
+                            var newIntrestTransaction = new IntrestTrasaction
+                            {
+                                SGId = request.SGId,
+                                MonthId = newMonth.MonthId,
+                                MemberId = member.MemberId,
+                                OutstandingIntrestAmount = 0,
+                                CurrentIntrestAmount = loansAccount.LoanAmount / 100 * (decimal)loansAccount.RateOfIntrest,
+                                DepositIntrestAmount = 0,
+                                Createddate = DateTime.Now
+                            };
+                            intrestTransactions.Add(newIntrestTransaction);
+                        }
+
+                    }
+
+                    if (intrestTransactions.Count > 0)
+                    {
+                        _context.IntrestTrasactions.AddRange(intrestTransactions);
+                    }
+                    await _context.SaveChangesAsync();
+                    return new CreateMonthResponseDto
+                    {
+                        MonthId = newMonth.MonthId,
+                        MonthName = newMonth.MonthName,
+
+                        MonthNo = newMonth.MonthNo,
+                        YearNo = newMonth.YearNo,
+                        Success = true,
+                        Message = "Month created successfully"
+                    };
                 }
-
-                if(intrestTransactions.Count>0)
-                {
-                    _context.IntrestTrasactions.AddRange(intrestTransactions);
-                }
-                 await _context.SaveChangesAsync();
-
-               
-
-
-                return new CreateMonthResponseDto
-                {
-                    MonthId = newMonth.MonthId,
-                    MonthName = newMonth.MonthName,
-                    
-                    MonthNo = newMonth.MonthNo,
-                    YearNo = newMonth.YearNo,
-                    Success = true,
-                    Message = "Month created successfully"
-                };
-            }
                 else
                 {
                     return new CreateMonthResponseDto
@@ -158,7 +264,7 @@ namespace BachatGatDAL.Repositories
                     Message = $"Error creating month: {ex.Message}"
                 };
             }
-        }
+        }*/
 
         public async Task<GetLastMonthResponseDto> GetLastMonth(int sgId)
         {

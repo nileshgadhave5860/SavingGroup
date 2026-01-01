@@ -7,22 +7,21 @@ namespace BachatGatDAL.Entities
    public class IncomeExpensesAccount
    {
     [Key]
-	public int IEId {get;set;}
-	 [ForeignKey("SavingGroupAccount")]
+    public int IEId {get;set;}
+	[ForeignKey("SavingGroupAccount")]
 	public int SGId {get;set;}
-	 [ForeignKey("MonthMaster")]
+	[ForeignKey("MonthMaster")]
 	public int MonthId {get;set;}
-	 [ForeignKey("Member")]
 	public string Particulars {get;set;}
-    public int PaymentType {get;set;}
 	public decimal Income {get;set;}
 	public decimal Expenses {get;set;}
 	public DateTime UpdatedDate {get;set;}
 	public DateTime CreatedDate {get;set;}
 	public Guid TransactionId {get;set;}
+	public int PaymentType {get;set;}
 
         public SavingGroupAccount SavingGroupAccount { get; set; } = null!;
         public MonthMaster MonthMaster { get; set; } = null!;
-        public Member Member { get; set; } = null!;
+       
   }
 }

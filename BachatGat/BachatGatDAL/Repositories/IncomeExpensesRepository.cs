@@ -19,109 +19,91 @@ namespace BachatGatDAL.Repositories
 
         public async Task<IncomeExpensesResponseDto> IncomeExpenseCreate(IncomeExpensesRequestDto request)
         {
-            try{
-            Guid TransactionId = Guid.NewGuid();
-            if(request.IncomeExpensesType==1) // Income
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                var income = new IncomeExpensesAccount
+                Guid transactionId = Guid.NewGuid();
+
+                // Income or Expense entry
+                var incomeExpense = new IncomeExpensesAccount
                 {
                     SGId = request.SGId,
                     MonthId = request.MonthId,
-                     Income=request.Amount,
-                      PaymentType=request.PaymentType,
+                    Income = request.IncomeExpensesType == 1 ? request.Amount : 0,
+                    Expenses = request.IncomeExpensesType == 2 ? request.Amount : 0,
+                    PaymentType = request.PaymentType,
                     Particulars = request.Particulars,
-                     Expenses=0,
-                    TransactionId =TransactionId,              
+                    TransactionId = transactionId,
                     CreatedDate = DateTime.Now,
                     UpdatedDate = DateTime.Now
                 };
-              await  _context.IncomeExpensesAccounts.AddAsync(income);
-            }
-            else if(request.IncomeExpensesType==2) 
-            {              
-               var expense = new IncomeExpensesAccount
+
+                await _context.IncomeExpensesAccounts.AddAsync(incomeExpense);
+
+                // Cash or Bank entry
+                if (request.PaymentType == (int)PaymentType.Cash)
                 {
-                    SGId = request.SGId,
-                    MonthId = request.MonthId,
-                     Income=request.Amount,
-                      PaymentType=request.PaymentType,
-                    Particulars = request.Particulars,
-                     Expenses=0,
-                    TransactionId =TransactionId,              
-                    CreatedDate = DateTime.Now,
-                    UpdatedDate = DateTime.Now
-                };
-              await  _context.IncomeExpensesAccounts.AddAsync(expense);
-            }
-            await _context.SaveChangesAsync();
-             if (request.PaymentType ==(int) PaymentType.Cash)
-                {
-                    CashAccount Account = new CashAccount();
-                    
-                        Account.SGId = request.SGId;
-                        Account.MonthId = request.MonthId;
-                        if(request.IncomeExpensesType==1)
-                        {
-                            Account.Particulars = $" income for {request.Particulars}";
-                            Account.CrAmount = 0;
-                            Account.DrAmount = request.Amount;
-                        }
-                        else if(request.IncomeExpensesType==2)
-                        {
-                            Account.Particulars = $" expense for {request.Particulars}";
-                            Account.CrAmount = request.Amount;
-                            Account.DrAmount = 0;
-                        }
-                        
-                        Account.CreatedDate = DateTime.Now;
-                        Account.UpdatedDate = DateTime.Now;
-                        Account.TransactionId = TransactionId;
-                    
-                    _context.CashAccounts.Add(Account);
+                    var cashAccount = new CashAccount
+                    {
+                        SGId = request.SGId,
+                        MonthId = request.MonthId,
+                        Particulars = request.IncomeExpensesType == 1
+                            ? $" income for {request.Particulars}"
+                            : $" expense for {request.Particulars}",
+                        CrAmount = request.IncomeExpensesType == 2 ? request.Amount : 0,
+                        DrAmount = request.IncomeExpensesType == 1 ? request.Amount : 0,
+                        CreatedDate = DateTime.Now,
+                        UpdatedDate = DateTime.Now,
+                        TransactionId = transactionId
+                    };
+
+                    await _context.CashAccounts.AddAsync(cashAccount);
                 }
-                else if (request.PaymentType ==(int) PaymentType.Bank)
+                else if (request.PaymentType == (int)PaymentType.Bank)
                 {
-                   
-                    BankAccount Account = new BankAccount();                    
-                        Account.SGId = request.SGId;
-                        Account.MonthId = request.MonthId;
-                        if(request.IncomeExpensesType==1)
-                        {
-                            Account.Particulars = $" income for {request.Particulars}";
-                            Account.CrAmount = 0;
-                            Account.DrAmount = request.Amount;
-                        }
-                        else if(request.IncomeExpensesType==2)
-                        {
-                            Account.Particulars = $" expense for {request.Particulars}";
-                            Account.CrAmount = request.Amount;
-                            Account.DrAmount = 0;
-                        }
-                        Account.CreatedDate = DateTime.Now;
-                        Account.UpdatedDate = DateTime.Now;
-                        Account.TransactionId = TransactionId;                   
-                    _context.BankAccounts.Add(Account);
+                    var bankAccount = new BankAccount
+                    {
+                        SGId = request.SGId,
+                        MonthId = request.MonthId,
+                        Particulars = request.IncomeExpensesType == 1
+                            ? $" income for {request.Particulars}"
+                            : $" expense for {request.Particulars}",
+                        CrAmount = request.IncomeExpensesType == 2 ? request.Amount : 0,
+                        DrAmount = request.IncomeExpensesType == 1 ? request.Amount : 0,
+                        CreatedDate = DateTime.Now,
+                        UpdatedDate = DateTime.Now,
+                        TransactionId = transactionId
+                    };
+
+                    await _context.BankAccounts.AddAsync(bankAccount);
                 }
 
+                // Save all changes together
                 await _context.SaveChangesAsync();
- 
 
-            return new IncomeExpensesResponseDto
-            {
-                Success = true,
-                Message = "Income/Expense recorded successfully."
-            };
+                // Commit transaction
+                await transaction.CommitAsync();
+
+                return new IncomeExpensesResponseDto
+                {
+                    Success = true,
+                    Message = "Income/Expense recorded successfully."
+                };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                 return new IncomeExpensesResponseDto
-            {
-                Success = false,
-                Message = $"Error recording Income/Expense: {ex.Message}"
-            };
+                // Rollback if anything fails
+                await transaction.RollbackAsync();
+
+                return new IncomeExpensesResponseDto
+                {
+                    Success = false,
+                    Message = $"Error recording Income/Expense: {ex.Message}"
+                };
             }
         }
-       public async Task<List<IncomeExpensesAccountDto>> GetIncomeExpensesBySGId(int SGId)
+
+        public async Task<List<IncomeExpensesAccountDto>> GetIncomeExpensesBySGId(int SGId)
         {
             try
             {
@@ -141,9 +123,9 @@ namespace BachatGatDAL.Repositories
                     }).ToListAsync();
                 return records;
 
-                
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log the exception (not implemented here)
                 return new List<IncomeExpensesAccountDto>();
@@ -151,37 +133,173 @@ namespace BachatGatDAL.Repositories
         }
 
         public async Task<IncomeExpensesResponseDto> DeleteIncomeExpense(int IEId)
+{
+    await using var transaction = await _context.Database.BeginTransactionAsync();
+    try
+    {
+        var record = await _context.IncomeExpensesAccounts.FindAsync(IEId);
+        if (record == null)
         {
-            try
+            return new IncomeExpensesResponseDto
             {
-                var record = await _context.IncomeExpensesAccounts.FindAsync(IEId);
-                if (record == null)
-                {
-                    return new IncomeExpensesResponseDto
-                    {
-                        Success = false,
-                        Message = "Record not found."
-                    };
-                }
-
-                _context.IncomeExpensesAccounts.Remove(record);
-                await _context.SaveChangesAsync();
-
-                return new IncomeExpensesResponseDto
-                {
-                    Success = true,
-                    Message = "Record deleted successfully."
-                };
-            }
-            catch (Exception ex)
-            {
-                return new IncomeExpensesResponseDto
-                {
-                    Success = false,
-                    Message = $"Error deleting record: {ex.Message}"
-                };
-            }
+                Success = false,
+                Message = "Record not found."
+            };
         }
+
+        // Remove Income/Expense record
+        _context.IncomeExpensesAccounts.Remove(record);
+
+        // Remove linked CashAccount if exists
+        var cashAccountEntity = await _context.CashAccounts
+            .FirstOrDefaultAsync(ca => ca.TransactionId == record.TransactionId);
+        if (cashAccountEntity != null)
+        {
+            _context.CashAccounts.Remove(cashAccountEntity);
+        }
+
+        // Remove linked BankAccount if exists
+        var bankAccountEntity = await _context.BankAccounts
+            .FirstOrDefaultAsync(ba => ba.TransactionId == record.TransactionId);
+        if (bankAccountEntity != null)
+        {
+            _context.BankAccounts.Remove(bankAccountEntity);
+        }
+
+        // Save all deletions together
+        await _context.SaveChangesAsync();
+
+        // Commit transaction
+        await transaction.CommitAsync();
+
+        return new IncomeExpensesResponseDto
+        {
+            Success = true,
+            Message = "Record deleted successfully."
+        };
+    }
+    catch (Exception ex)
+    {
+        // Rollback if anything fails
+        await transaction.RollbackAsync();
+
+        return new IncomeExpensesResponseDto
+        {
+            Success = false,
+            Message = $"Error deleting record: {ex.Message}"
+        };
+    }
+}
+
+
+public async Task<IncomeExpensesResponseDto> UpdateIncomeExpense(UpdateIncomeExpensesDto request)
+{
+    await using var transaction = await _context.Database.BeginTransactionAsync();
+    try
+    {
+        var record = await _context.IncomeExpensesAccounts.FindAsync(request.IEId);
+        if (record == null)
+        {
+            return new IncomeExpensesResponseDto
+            {
+                Success = false,
+                Message = "Record not found."
+            };
+        }
+
+        // Update Income/Expense record
+        record.Particulars = request.Particulars;
+        if (request.IncomeExpensesType == 1) // Income
+        {
+            record.Income = request.Amount;
+            record.Expenses = 0;
+        }
+        else if (request.IncomeExpensesType == 2) // Expense
+        {
+            record.Income = 0;
+            record.Expenses = request.Amount;
+        }
+        record.UpdatedDate = DateTime.Now;
+
+        _context.IncomeExpensesAccounts.Update(record);
+
+        // Remove old Cash/Bank entries
+        var cashAccountEntity = await _context.CashAccounts
+            .FirstOrDefaultAsync(ca => ca.TransactionId == record.TransactionId);
+        if (cashAccountEntity != null)
+        {
+            _context.CashAccounts.Remove(cashAccountEntity);
+        }
+
+        var bankAccountEntity = await _context.BankAccounts
+            .FirstOrDefaultAsync(ba => ba.TransactionId == record.TransactionId);
+        if (bankAccountEntity != null)
+        {
+            _context.BankAccounts.Remove(bankAccountEntity);
+        }
+
+        // Add updated Cash/Bank entry
+        if (record.PaymentType == (int)PaymentType.Cash)
+        {
+            var cashAccount = new CashAccount
+            {
+                SGId = record.SGId,
+                MonthId = record.MonthId,
+                Particulars = request.IncomeExpensesType == 1
+                    ? $" income for {request.Particulars}"
+                    : $" expense for {request.Particulars}",
+                CrAmount = request.IncomeExpensesType == 2 ? request.Amount : 0,
+                DrAmount = request.IncomeExpensesType == 1 ? request.Amount : 0,
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                TransactionId = record.TransactionId
+            };
+
+            await _context.CashAccounts.AddAsync(cashAccount);
+        }
+        else if (record.PaymentType == (int)PaymentType.Bank)
+        {
+            var bankAccount = new BankAccount
+            {
+                SGId = record.SGId,
+                MonthId = record.MonthId,
+                Particulars = request.IncomeExpensesType == 1
+                    ? $" income for {request.Particulars}"
+                    : $" expense for {request.Particulars}",
+                CrAmount = request.IncomeExpensesType == 2 ? request.Amount : 0,
+                DrAmount = request.IncomeExpensesType == 1 ? request.Amount : 0,
+                CreatedDate = DateTime.Now,
+                UpdatedDate = DateTime.Now,
+                TransactionId = record.TransactionId
+            };
+
+            await _context.BankAccounts.AddAsync(bankAccount);
+        }
+
+        // Save all changes together
+        await _context.SaveChangesAsync();
+
+        // Commit transaction
+        await transaction.CommitAsync();
+
+        return new IncomeExpensesResponseDto
+        {
+            Success = true,
+            Message = "Income/Expense updated successfully."
+        };
+    }
+    catch (Exception ex)
+    {
+        // Rollback if anything fails
+        await transaction.RollbackAsync();
+
+        return new IncomeExpensesResponseDto
+        {
+            Success = false,
+            Message = $"Error updating record: {ex.Message}"
+        };
+    }
+}
 
 
         // Implement methods for income and expenses management here

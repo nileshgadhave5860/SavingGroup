@@ -10,7 +10,7 @@ namespace BachatGatDTO.Models
         public int MonthStartDate { get; set; }
         public int MonthEndDate { get; set; }
         public decimal MonthlySavingAmount { get; set; }
-        public decimal MonthlyRateOfIntrest { get; set; }
+        public decimal InterestEarned { get; set; }
         public decimal LatePaymentCharges_PerDay { get; set; }
         public int MonthNo { get; set; }
         public int YearNo { get; set; }

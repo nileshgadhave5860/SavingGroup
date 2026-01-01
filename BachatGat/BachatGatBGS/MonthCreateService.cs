@@ -45,7 +45,6 @@ public class MonthCreateService : BackgroundService
         using var scope = _serviceProvider.CreateScope();
         var savingGroupRepo = scope.ServiceProvider.GetRequiredService<ISavingGroupRepository>();
         var monthRepo = scope.ServiceProvider.GetRequiredService<IMonthRepository>();
-
         var savingGroups = await savingGroupRepo.GetAllSavingGroups();
         foreach (var sg in savingGroups)
         {

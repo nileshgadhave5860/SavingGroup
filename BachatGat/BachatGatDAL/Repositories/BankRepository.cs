@@ -16,8 +16,10 @@ namespace BachatGatDAL.Repositories
         {
             _context = context;
         }
+
         public async Task<BankResponseDto> CashDeposit(BankRequestDto request)
         {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var transactionId = Guid.NewGuid();
@@ -33,9 +35,10 @@ namespace BachatGatDAL.Repositories
                     UpdatedDate = DateTime.Now,
                     TransactionId = transactionId
                 };
-                _context.BankAccounts.Add(bankAccount);
-                await _context.SaveChangesAsync();
-                var CashAccount = new CashAccount
+
+                await _context.BankAccounts.AddAsync(bankAccount);
+
+                var cashAccount = new CashAccount
                 {
                     SGId = request.SGId,
                     MonthId = request.MonthId,
@@ -46,8 +49,15 @@ namespace BachatGatDAL.Repositories
                     UpdatedDate = DateTime.Now,
                     TransactionId = transactionId
                 };
-_context.CashAccounts.Add(CashAccount);
+
+                await _context.CashAccounts.AddAsync(cashAccount);
+
+                // Save both together
                 await _context.SaveChangesAsync();
+
+                // Commit transaction
+                await transaction.CommitAsync();
+
                 return new BankResponseDto
                 {
                     Success = true,
@@ -56,17 +66,21 @@ _context.CashAccounts.Add(CashAccount);
             }
             catch (Exception ex)
             {
+                // Rollback if anything fails
+                await transaction.RollbackAsync();
+
                 return new BankResponseDto
                 {
                     Success = false,
                     Message = $"Error recording bank transaction: {ex.Message}"
                 };
             }
-
         }
+
         // cash withdraw
-        public async Task<BankResponseDto> CashWithdraw(BankRequestDto request) 
+        public async Task<BankResponseDto> CashWithdraw(BankRequestDto request)
         {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var transactionId = Guid.NewGuid();
@@ -82,9 +96,10 @@ _context.CashAccounts.Add(CashAccount);
                     UpdatedDate = DateTime.Now,
                     TransactionId = transactionId
                 };
-                _context.BankAccounts.Add(bankAccount);
-                await _context.SaveChangesAsync();
-                var CashAccount = new CashAccount
+
+                await _context.BankAccounts.AddAsync(bankAccount);
+
+                var cashAccount = new CashAccount
                 {
                     SGId = request.SGId,
                     MonthId = request.MonthId,
@@ -95,8 +110,15 @@ _context.CashAccounts.Add(CashAccount);
                     UpdatedDate = DateTime.Now,
                     TransactionId = transactionId
                 };
-                _context.CashAccounts.Add(CashAccount);
+
+                await _context.CashAccounts.AddAsync(cashAccount);
+
+                // Save both together
                 await _context.SaveChangesAsync();
+
+                // Commit transaction
+                await transaction.CommitAsync();
+
                 return new BankResponseDto
                 {
                     Success = true,
@@ -105,13 +127,17 @@ _context.CashAccounts.Add(CashAccount);
             }
             catch (Exception ex)
             {
+                // Rollback if anything fails
+                await transaction.RollbackAsync();
+
                 return new BankResponseDto
                 {
                     Success = false,
                     Message = $"Error recording bank withdraw transaction: {ex.Message}"
                 };
             }
-
         }
+
+
     }
 }

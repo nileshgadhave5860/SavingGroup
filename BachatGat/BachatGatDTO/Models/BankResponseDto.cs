@@ -3,7 +3,7 @@ namespace BachatGatDTO.Models
     public class BankResponseDto
     {
         public bool Success { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; } = null!;
     }
     public class BankRequestDto
     {

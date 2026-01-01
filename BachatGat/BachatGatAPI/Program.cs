@@ -63,6 +63,16 @@ builder.Services.AddScoped<ILoanTrasactionRepository, LoanTrasactionRepository>(
 // Register Bank services
 builder.Services.AddScoped<IBankService, BankService>();
 builder.Services.AddScoped<IBankRepository, BankRepository>();
+// Register IncomeExpenses services
+builder.Services.AddScoped<IIncomeExpensesService, IncomeExpensesService>();
+builder.Services.AddScoped<IIncomeExpensesRepository, IncomeExpensesRepository>();
+
+// Register LatePaymentCharges services
+builder.Services.AddScoped<ILatePaymentChargesRepository, LatePaymentChargesRepository>();
+builder.Services.AddScoped<ILatePaymentChargesService, LatePaymentChargesService>();
+
+// Register Background Service for Late Payment Charges Calculation
+builder.Services.AddHostedService<LatePaymentChargesBackgroundService>();
 builder.Services.AddHostedService<MonthCreateService>();
 // Register AppDbContext using connection string from configuration
 

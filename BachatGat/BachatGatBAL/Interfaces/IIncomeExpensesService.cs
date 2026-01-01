@@ -1,8 +1,8 @@
 using BachatGatDTO.Models;
 
-namespace BachatGatDAL.Interfaces
+namespace BachatGatBAL.Interfaces
 {
-   public interface IIncomeExpensesRepository
+    public interface IIncomeExpensesService
     {
         Task<IncomeExpensesResponseDto> IncomeExpenseCreate(IncomeExpensesRequestDto request);
         Task<List<IncomeExpensesAccountDto>> GetIncomeExpensesBySGId(int SGId);

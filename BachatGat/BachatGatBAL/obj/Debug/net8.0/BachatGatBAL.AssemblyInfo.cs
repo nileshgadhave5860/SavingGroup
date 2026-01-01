@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BachatGatBAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c9829be919a0087d338deec63d68527ae292f578")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92e067e8574b422792652ce1d0116ce7fc3e4068")]
 [assembly: System.Reflection.AssemblyProductAttribute("BachatGatBAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BachatGatBAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
