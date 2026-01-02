@@ -3439,8 +3439,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBAL\\BachatGatBAL.csproj": {
-              "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBAL\\BachatGatBAL.csproj"
+            "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBAL\\BachatGatBAL.csproj": {
+              "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBAL\\BachatGatBAL.csproj"
             },
             "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj": {
               "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatBGS\\BachatGatBGS.csproj"
@@ -3448,8 +3448,8 @@
             "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj": {
               "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDAL\\BachatGatDAL.csproj"
             },
-            "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj": {
-              "projectPath": "D:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj"
+            "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj": {
+              "projectPath": "d:\\AdvanceProject\\SavingGroup\\BachatGat\\BachatGatDTO\\BachatGatDTO.csproj"
             }
           }
         }

@@ -335,6 +335,7 @@ namespace BachatGatDAL.Repositories
             var savingPendingAmount = await _context.SavingTrasactions
             .Where(st => st.SGId == sgId && st.MemberId == memberId && st.CurrentSavingAmount - st.DepositSavingAmount > 0)
             .SumAsync(st => (decimal?)(st.CurrentSavingAmount - st.DepositSavingAmount)) ?? 0;
+
             var intrestPendingMonthsCount = await _context.IntrestTrasactions
               .Where(it => it.SGId == sgId && it.MemberId == memberId && it.CurrentIntrestAmount - it.DepositIntrestAmount > 0)
               .CountAsync();
@@ -342,6 +343,18 @@ namespace BachatGatDAL.Repositories
                 .Where(it => it.SGId == sgId && it.MemberId == memberId && it.CurrentIntrestAmount - it.DepositIntrestAmount > 0)
                 .SumAsync(it => (decimal?)(it.CurrentIntrestAmount - it.DepositIntrestAmount)) ?? 0;
 
+
+            var TotalSaving=await _context.SavingTrasactions
+                .Where(st => st.SGId == sgId && st.MemberId == memberId)
+                .SumAsync(st => (decimal?)st.DepositSavingAmount) ?? 0;
+ 
+            var TotalLoan=await _context.LoansAccounts
+                .Where(lt => lt.SGId == sgId && lt.MemberId == memberId)
+                .SumAsync(lt => (decimal?)lt.LoanAmount - (decimal?)lt.RepaymentAmount) ?? 0;
+
+             var LateFeesPendingAmount=await _context.LatePaymentCharges
+             .Where(x=>x.SGId==sgId && x.MemberId==memberId)
+             .SumAsync(x=>(decimal)x.Charges-(decimal?)x.ChargesDeposit??0);
 
             var MemberDashboard = new MemberDashboardDto()
             {
@@ -351,9 +364,9 @@ namespace BachatGatDAL.Repositories
                 SavingPendingAmount = savingPendingAmount,
                 IntrestPendingAmount = intrestPendingAmount,
                 IntrestPendingMonthsCount = intrestPendingMonthsCount,
-                LateFeesPendingAmount = 0,
-                TotalLoan = Memberdata.TotalLoan,
-                TotalSavings = Memberdata.TotalSaving + Memberdata.Deposit,
+                LateFeesPendingAmount = LateFeesPendingAmount,
+                TotalLoan = TotalLoan,
+                TotalSavings =TotalSaving + Memberdata.Deposit,
 
                 SavingGroupDetails = await GetSavingGroupDashboardData(sgId)
             };
