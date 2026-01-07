@@ -79,5 +79,19 @@ namespace BachatGatAPI.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpGet("pending-by-member/{sgId}/{memberId}")]
+        public async Task<ActionResult<List<MemberPendingLatePaymentDto>>> GetPendingLatePaymentByMember(int sgId, int memberId)
+        {
+            try
+            {
+                var result = await _service.GetPendingLatePaymentByMember(sgId, memberId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }

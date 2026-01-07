@@ -58,6 +58,26 @@ namespace BachatGatAPI.Controllers
             }
         }
 
+        [HttpPost("PendingDeposit")]
+        public async Task<ActionResult<SavingTrasactionUpdateResposneDto>> PendingDeposit([FromBody] PendingDepositdto request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var result = await _service.PendingDeposit(request);
+                if (!result.Success)
+                    return BadRequest(result);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         
 
 

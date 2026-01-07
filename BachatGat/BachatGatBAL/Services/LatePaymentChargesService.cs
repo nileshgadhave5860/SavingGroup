@@ -32,5 +32,10 @@ namespace BachatGatBAL.Services
         {
             return await _repository.UpdateLatePaymentCharge(lpcId, depositAmount);
         }
+
+        public async Task<List<MemberPendingLatePaymentDto>> GetPendingLatePaymentByMember(int sgId, int memberId)
+        {
+            return await _repository.GetPendingLatePaymentByMember(sgId, memberId);
+        }
     }
 }

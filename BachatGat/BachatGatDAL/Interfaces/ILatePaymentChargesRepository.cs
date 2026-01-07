@@ -8,5 +8,6 @@ namespace BachatGatDAL.Interfaces
         Task<List<LatePaymentChargesAccountDto>> GetPendingLatePaymentCharges(int sgId);
         Task<LatePaymentChargesReposnseDto> DeleteLatePaymentCharge(int lpcId);
         Task<LatePaymentChargesReposnseDto> UpdateLatePaymentCharge(int lpcId, decimal depositAmount);
+        Task<List<MemberPendingLatePaymentDto>> GetPendingLatePaymentByMember(int sgId, int memberId);
     }
 }

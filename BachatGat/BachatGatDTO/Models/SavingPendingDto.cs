@@ -34,4 +34,18 @@ namespace BachatGatDTO.Models
         public int PaymentType { get; set; }
         public decimal DepositSavingAmount { get; set; }
   }
+
+  public class PendingDepositdto
+  {
+    public int SGId{get;set;}
+    public int MemberId{get;set;}
+    public int MonthId{get;set;}
+    public List<int>STIds{get;set;}=null!;
+    public List<int>ITId{get;set;}=null!;
+    public List<int>lpcId{get;set;}=null!;
+    public decimal EMIAmount{get;set;}
+    public int PaymentType{get;set;}
+  }
+
+
 }

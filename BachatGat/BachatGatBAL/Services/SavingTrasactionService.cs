@@ -27,5 +27,10 @@ namespace BachatGatBAL.Services
         {
             return await _repository.UpdateSavingTrasactionAsync(requests);
         }
+
+        public async Task<SavingTrasactionUpdateResposneDto> PendingDeposit(PendingDepositdto request)
+        {
+            return await _repository.PendingDeposit(request);
+        }
     }
 }

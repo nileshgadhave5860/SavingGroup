@@ -42,5 +42,10 @@ namespace BachatGatBAL.Services
         {
             return await _repository.GetMemberDataBySGId(sgId);
         }
+
+        public async Task<List<SLIPedingDto>> GetMemberPendingDataBySGId(int sgId)
+        {
+            return await _repository.GetMemberPendingDataBySGId(sgId);
+        }
     }
 }

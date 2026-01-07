@@ -7,5 +7,6 @@ namespace BachatGatBAL.Interfaces
        Task<List<SavingPendingDto>> SavingPending(int SGId);
        Task<List<SavingPendingByMemberDto>> SavingPendingByMember(int SGId,int MemberId);
      Task<SavingTrasactionUpdateResposneDto> UpdateSavingTrasactionAsync(List<SavingTrasactionUpdateDto> requests);
+      Task<SavingTrasactionUpdateResposneDto> PendingDeposit(PendingDepositdto request);
     }
 }

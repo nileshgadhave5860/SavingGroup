@@ -11,6 +11,16 @@ namespace BachatGatDTO.Models
        
         public decimal depositAmount { get; set; }
     }
+    public class MemberPendingLatePaymentDto
+    {
+        public int lpcId { get; set; }
+        public string MemberName { get; set; } = null!;
+        public string MonthName { get; set; } = null!;
+       public int NoOfDay { get; set; }
+        public decimal PerDayCharges { get; set; }
+        public decimal Charges { get; set; }
+         
+    }
     public class LatePaymentChargesAccountDto
     {
         public int LPCID { get; set; }

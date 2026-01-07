@@ -160,6 +160,23 @@ namespace BachatGatDAL.Repositories
             };
         }
 
+        public Task<List<MemberPendingLatePaymentDto>> GetPendingLatePaymentByMember(int sgId, int memberId)
+        {
+            var Response = _context.LatePaymentCharges.Include(x=>x.Member)
+            .Include(x=>x.MonthMaster).Where(x=>x.SGId==sgId && x.MemberId==memberId && (x.Charges - (x.ChargesDeposit ?? 0)) > 0)
+            .Select(lpc => new MemberPendingLatePaymentDto
+            {
+                lpcId = lpc.LPCID,
+                MemberName = lpc.Member!.FullName,
+                MonthName = lpc.MonthMaster!.MonthName,
+                NoOfDay = lpc.NoOfDay,
+                PerDayCharges = lpc.PerDayCharges,
+                Charges = lpc.Charges,
+            }).ToListAsync();
+                
+            return Response;
+        }
+
     }
 
     

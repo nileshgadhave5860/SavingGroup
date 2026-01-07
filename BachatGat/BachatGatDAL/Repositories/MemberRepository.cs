@@ -16,8 +16,62 @@ namespace BachatGatDAL.Repositories
             _context = context;
         }
 
-       /* public async Task<CreateMemberResponseDto> CreateMember(CreateMemberDto request)
+        public async Task<List<SLIPedingDto>> GetMemberPendingDataBySGId(int sgId)
         {
+            try
+            {
+              List<SLIPedingDto> response=new List<SLIPedingDto>();
+                var memberList = await _context.Members
+                    .Where(m => m.SGId == sgId && m.IsActive)
+                    .Select(m => new { m.MemberId, m.FullName })
+                    .ToListAsync();
+                foreach (var member in memberList)
+                {
+                    var memberId = member.MemberId;
+                    var savingPendingAmount = await _context.SavingTrasactions
+                    .Where(st => st.SGId == sgId && st.MemberId == memberId && st.CurrentSavingAmount - st.DepositSavingAmount > 0)
+                    .SumAsync(st => (decimal?)(st.CurrentSavingAmount - st.DepositSavingAmount)) ?? 0;
+
+                    var intrestPendingAmount = await _context.IntrestTrasactions
+                        .Where(it => it.SGId == sgId && it.MemberId == memberId && it.CurrentIntrestAmount - it.DepositIntrestAmount > 0)
+                        .SumAsync(it => (decimal?)(it.CurrentIntrestAmount - it.DepositIntrestAmount)) ?? 0;
+
+                    var TotalLoan = await _context.LoansAccounts
+                        .Where(lt => lt.SGId == sgId && lt.MemberId == memberId)
+                        .SumAsync(lt => (decimal?)lt.LoanAmount - (decimal?)lt.RepaymentAmount) ?? 0;
+
+                    var LateFeesPendingAmount = await _context.LatePaymentCharges
+                    .Where(x => x.SGId == sgId && x.MemberId == memberId)
+                    .SumAsync(x => (decimal)x.Charges - (decimal?)x.ChargesDeposit ?? 0);
+
+                    var loanEmi=await _context.LoansAccounts
+                        .FirstOrDefaultAsync(lt => lt.SGId == sgId && lt.MemberId == memberId && lt.LoanAmount - lt.RepaymentAmount>0);
+                        
+                    if(savingPendingAmount>0 || intrestPendingAmount>0 )
+                    {
+                    response.Add(new SLIPedingDto
+                    {
+                        MemberId = memberId,
+                        MemberName = member.FullName,
+                        SavingPending = savingPendingAmount,
+                        LoanPending = TotalLoan + LateFeesPendingAmount,
+                        IntrestPending = intrestPendingAmount,
+                        LateFeesPendingAmount = LateFeesPendingAmount,
+                        EMIAmount = loanEmi != null ? loanEmi.MonthlyInstallment : 0
+                    });
+                    }
+
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving member pending data: {ex.Message}");
+            }
+        }
+        public async Task<CreateMemberResponseDto> CreateMember(CreateMemberDto request)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var transactionId = Guid.NewGuid();
@@ -39,8 +93,7 @@ namespace BachatGatDAL.Repositories
                     TransactionId = transactionId
                 };
 
-                _context.Members.Add(member);
-                await _context.SaveChangesAsync();
+                await _context.Members.AddAsync(member);
 
                 // Create CashAccount or BankAccount based on PaymentType
                 if (request.PaymentType == PaymentType.Cash)
@@ -56,7 +109,7 @@ namespace BachatGatDAL.Repositories
                         UpdatedDate = DateTime.Now,
                         TransactionId = transactionId
                     };
-                    _context.CashAccounts.Add(cashAccount);
+                    await _context.CashAccounts.AddAsync(cashAccount);
                 }
                 else if (request.PaymentType == PaymentType.Bank)
                 {
@@ -71,29 +124,37 @@ namespace BachatGatDAL.Repositories
                         UpdatedDate = DateTime.Now,
                         TransactionId = transactionId
                     };
-                    _context.BankAccounts.Add(bankAccount);
+                    await _context.BankAccounts.AddAsync(bankAccount);
                 }
 
+                // Save Member + Cash/Bank together
                 await _context.SaveChangesAsync();
 
-                
-                var sgdata = await _context.SavingGroupAccounts.FirstOrDefaultAsync(sg => sg.SGId == request.SGId);
+                // Create SavingTransaction if SG exists
+                var sgdata = await _context.SavingGroupAccounts
+                    .FirstOrDefaultAsync(sg => sg.SGId == request.SGId);
+
                 if (sgdata != null)
                 {
-                  var savingTransactions = new SavingTrasaction
+                    var savingTransaction = new SavingTrasaction
                     {
                         SGId = request.SGId,
-                        MemberId = member.MemberId,                        
+                        MemberId = member.MemberId,
                         MonthId = request.MonthId,
                         CurrentSavingAmount = sgdata.MonthlySavingAmount,
                         DepositSavingAmount = 0,
                         OutstandingSavingAmount = 0,
                         Createddate = DateTime.Now
                     };
-                   await _context.SavingTrasactions.AddAsync(savingTransactions);
-                    await _context.SaveChangesAsync();
+
+                    await _context.SavingTrasactions.AddAsync(savingTransaction);
                 }
 
+                // Save SavingTransaction
+                await _context.SaveChangesAsync();
+
+                // Commit transaction
+                await transaction.CommitAsync();
 
                 return new CreateMemberResponseDto
                 {
@@ -106,280 +167,15 @@ namespace BachatGatDAL.Repositories
             }
             catch (Exception ex)
             {
+                // Rollback if anything fails
+                await transaction.RollbackAsync();
                 throw new Exception($"Error creating member: {ex.Message}");
             }
         }
-*/
-public async Task<CreateMemberResponseDto> CreateMember(CreateMemberDto request)
-{
-    await using var transaction = await _context.Database.BeginTransactionAsync();
-    try
-    {
-        var transactionId = Guid.NewGuid();
 
-        // Create Member
-        var member = new Member
+        public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
         {
-            SGId = request.SGId,
-            FullName = request.FullName,
-            Address = request.Address,
-            MobileNo = request.MobileNo,
-            Email = request.Email,
-            Password = Encoding.UTF8.GetBytes(request.Password),
-            TotalSaving = request.Deposit,
-            TotalLoan = 0,
-            Deposit = request.Deposit,
-            IsActive = true,
-            PaymentType = request.PaymentType,
-            TransactionId = transactionId
-        };
-
-        await _context.Members.AddAsync(member);
-
-        // Create CashAccount or BankAccount based on PaymentType
-        if (request.PaymentType == PaymentType.Cash)
-        {
-            var cashAccount = new CashAccount
-            {
-                SGId = request.SGId,
-                MonthId = request.MonthId,
-                Particulars = $"Member deposit for {request.FullName}",
-                CrAmount = 0,
-                DrAmount = request.Deposit,
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now,
-                TransactionId = transactionId
-            };
-            await _context.CashAccounts.AddAsync(cashAccount);
-        }
-        else if (request.PaymentType == PaymentType.Bank)
-        {
-            var bankAccount = new BankAccount
-            {
-                SGId = request.SGId,
-                MonthId = request.MonthId,
-                Particulars = $"Member deposit for {request.FullName}",
-                CrAmount = 0,
-                DrAmount = request.Deposit,
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now,
-                TransactionId = transactionId
-            };
-            await _context.BankAccounts.AddAsync(bankAccount);
-        }
-
-        // Save Member + Cash/Bank together
-        await _context.SaveChangesAsync();
-
-        // Create SavingTransaction if SG exists
-        var sgdata = await _context.SavingGroupAccounts
-            .FirstOrDefaultAsync(sg => sg.SGId == request.SGId);
-
-        if (sgdata != null)
-        {
-            var savingTransaction = new SavingTrasaction
-            {
-                SGId = request.SGId,
-                MemberId = member.MemberId,
-                MonthId = request.MonthId,
-                CurrentSavingAmount = sgdata.MonthlySavingAmount,
-                DepositSavingAmount = 0,
-                OutstandingSavingAmount = 0,
-                Createddate = DateTime.Now
-            };
-
-            await _context.SavingTrasactions.AddAsync(savingTransaction);
-        }
-
-        // Save SavingTransaction
-        await _context.SaveChangesAsync();
-
-        // Commit transaction
-        await transaction.CommitAsync();
-
-        return new CreateMemberResponseDto
-        {
-            MemberId = member.MemberId,
-            FullName = member.FullName,
-            TransactionId = transactionId,
-            Success = true,
-            Message = "Member created successfully"
-        };
-    }
-    catch (Exception ex)
-    {
-        // Rollback if anything fails
-        await transaction.RollbackAsync();
-        throw new Exception($"Error creating member: {ex.Message}");
-    }
-}
-
-public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
-{
-    await using var transaction = await _context.Database.BeginTransactionAsync();
-    try
-    {
-        var member = await _context.Members.FirstOrDefaultAsync(m => m.MemberId == request.MemberId);
-        if (member == null)
-        {
-            return new UpdateMemberResponseDto { Success = false, Message = "Member not found" };
-        }
-
-        // Store old PaymentType to check if it changed
-        var oldPaymentType = member.PaymentType;
-
-        // Update member details
-        member.FullName = request.FullName;
-        member.Address = request.Address;
-        member.MobileNo = request.MobileNo;
-        member.Email = request.Email;
-        if (request.Password != null)
-        {
-            member.Password = Encoding.UTF8.GetBytes(request.Password);
-        }
-
-        member.PaymentType = request.PaymentType;
-        member.Deposit = request.Deposit;
-        member.TotalSaving += request.Deposit;
-       // member. = DateTime.Now;
-
-        _context.Members.Update(member);
-
-        var transactionId = member.TransactionId;
-
-        // If payment type is same, update existing account record
-        if (oldPaymentType == request.PaymentType)
-        {
-            if (request.PaymentType == PaymentType.Cash)
-            {
-                var existingCashAccount = await _context.CashAccounts
-                    .FirstOrDefaultAsync(c => c.TransactionId == transactionId);
-
-                if (existingCashAccount != null)
-                {
-                    existingCashAccount.DrAmount = request.Deposit;
-                    existingCashAccount.UpdatedDate = DateTime.Now;
-                    _context.CashAccounts.Update(existingCashAccount);
-                }
-                else
-                {
-                    var cashAccount = new CashAccount
-                    {
-                        SGId = member.SGId,
-                        MonthId = request.MonthId,
-                        Particulars = $"Deposit update for {member.FullName}",
-                        CrAmount = 0,
-                        DrAmount = request.Deposit,
-                        CreatedDate = DateTime.Now,
-                        UpdatedDate = DateTime.Now,
-                        TransactionId = transactionId
-                    };
-                    await _context.CashAccounts.AddAsync(cashAccount);
-                }
-            }
-            else if (request.PaymentType == PaymentType.Bank)
-            {
-                var existingBankAccount = await _context.BankAccounts
-                    .FirstOrDefaultAsync(b => b.TransactionId == transactionId);
-
-                if (existingBankAccount != null)
-                {
-                    existingBankAccount.DrAmount = request.Deposit;
-                    existingBankAccount.UpdatedDate = DateTime.Now;
-                    _context.BankAccounts.Update(existingBankAccount);
-                }
-                else
-                {
-                    var bankAccount = new BankAccount
-                    {
-                        SGId = member.SGId,
-                        MonthId = request.MonthId,
-                        Particulars = $"Deposit update for {member.FullName}",
-                        CrAmount = 0,
-                        DrAmount = request.Deposit,
-                        CreatedDate = DateTime.Now,
-                        UpdatedDate = DateTime.Now,
-                        TransactionId = transactionId
-                    };
-                    await _context.BankAccounts.AddAsync(bankAccount);
-                }
-            }
-        }
-        else
-        {
-            // Delete opposite account type if payment type changed
-            if (oldPaymentType == PaymentType.Bank && request.PaymentType == PaymentType.Cash)
-            {
-                var bankAccounts = await _context.BankAccounts
-                    .Where(b => b.TransactionId == transactionId)
-                    .ToListAsync();
-                _context.BankAccounts.RemoveRange(bankAccounts);
-            }
-            else if (oldPaymentType == PaymentType.Cash && request.PaymentType == PaymentType.Bank)
-            {
-                var cashAccounts = await _context.CashAccounts
-                    .Where(c => c.TransactionId == transactionId)
-                    .ToListAsync();
-                _context.CashAccounts.RemoveRange(cashAccounts);
-            }
-
-            // Create new account with new PaymentType
-            if (request.PaymentType == PaymentType.Cash)
-            {
-                var cashAccount = new CashAccount
-                {
-                    SGId = member.SGId,
-                    MonthId = request.MonthId,
-                    Particulars = $"Deposit update for {member.FullName}",
-                    CrAmount = 0,
-                    DrAmount = request.Deposit,
-                    CreatedDate = DateTime.Now,
-                    UpdatedDate = DateTime.Now,
-                    TransactionId = transactionId
-                };
-                await _context.CashAccounts.AddAsync(cashAccount);
-            }
-            else if (request.PaymentType == PaymentType.Bank)
-            {
-                var bankAccount = new BankAccount
-                {
-                    SGId = member.SGId,
-                    MonthId = request.MonthId,
-                    Particulars = $"Deposit update for {member.FullName}",
-                    CrAmount = 0,
-                    DrAmount = request.Deposit,
-                    CreatedDate = DateTime.Now,
-                    UpdatedDate = DateTime.Now,
-                    TransactionId = transactionId
-                };
-                await _context.BankAccounts.AddAsync(bankAccount);
-            }
-        }
-
-        // Save all changes together
-        await _context.SaveChangesAsync();
-
-        // Commit transaction
-        await transaction.CommitAsync();
-
-        return new UpdateMemberResponseDto
-        {
-            MemberId = member.MemberId,
-            Success = true,
-            Message = "Member updated successfully"
-        };
-    }
-    catch (Exception ex)
-    {
-        // Rollback if anything fails
-        await transaction.RollbackAsync();
-        throw new Exception($"Error updating member: {ex.Message}");
-    }
-}
-
-
-    /*    public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
-        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var member = await _context.Members.FirstOrDefaultAsync(m => m.MemberId == request.MemberId);
@@ -396,19 +192,18 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
                 member.Address = request.Address;
                 member.MobileNo = request.MobileNo;
                 member.Email = request.Email;
-                if(request.Password != null)
+                if (request.Password != null)
                 {
- member.Password = Encoding.UTF8.GetBytes(request.Password);
+                    member.Password = Encoding.UTF8.GetBytes(request.Password);
                 }
-               
+
                 member.PaymentType = request.PaymentType;
                 member.Deposit = request.Deposit;
                 member.TotalSaving += request.Deposit;
-                
-                _context.Members.Update(member);
-                await _context.SaveChangesAsync();
+                // member. = DateTime.Now;
 
-             
+                _context.Members.Update(member);
+
                 var transactionId = member.TransactionId;
 
                 // If payment type is same, update existing account record
@@ -418,7 +213,7 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
                     {
                         var existingCashAccount = await _context.CashAccounts
                             .FirstOrDefaultAsync(c => c.TransactionId == transactionId);
-                        
+
                         if (existingCashAccount != null)
                         {
                             existingCashAccount.DrAmount = request.Deposit;
@@ -438,14 +233,14 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
                                 UpdatedDate = DateTime.Now,
                                 TransactionId = transactionId
                             };
-                            _context.CashAccounts.Add(cashAccount);
+                            await _context.CashAccounts.AddAsync(cashAccount);
                         }
                     }
                     else if (request.PaymentType == PaymentType.Bank)
                     {
                         var existingBankAccount = await _context.BankAccounts
                             .FirstOrDefaultAsync(b => b.TransactionId == transactionId);
-                        
+
                         if (existingBankAccount != null)
                         {
                             existingBankAccount.DrAmount = request.Deposit;
@@ -465,7 +260,7 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
                                 UpdatedDate = DateTime.Now,
                                 TransactionId = transactionId
                             };
-                            _context.BankAccounts.Add(bankAccount);
+                            await _context.BankAccounts.AddAsync(bankAccount);
                         }
                     }
                 }
@@ -474,7 +269,6 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
                     // Delete opposite account type if payment type changed
                     if (oldPaymentType == PaymentType.Bank && request.PaymentType == PaymentType.Cash)
                     {
-                        // Delete BankAccount with same TransactionId
                         var bankAccounts = await _context.BankAccounts
                             .Where(b => b.TransactionId == transactionId)
                             .ToListAsync();
@@ -482,13 +276,11 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
                     }
                     else if (oldPaymentType == PaymentType.Cash && request.PaymentType == PaymentType.Bank)
                     {
-                        // Delete CashAccount with same TransactionId
                         var cashAccounts = await _context.CashAccounts
                             .Where(c => c.TransactionId == transactionId)
                             .ToListAsync();
                         _context.CashAccounts.RemoveRange(cashAccounts);
                     }
-                    await _context.SaveChangesAsync();
 
                     // Create new account with new PaymentType
                     if (request.PaymentType == PaymentType.Cash)
@@ -504,7 +296,7 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
                             UpdatedDate = DateTime.Now,
                             TransactionId = transactionId
                         };
-                        _context.CashAccounts.Add(cashAccount);
+                        await _context.CashAccounts.AddAsync(cashAccount);
                     }
                     else if (request.PaymentType == PaymentType.Bank)
                     {
@@ -519,13 +311,15 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
                             UpdatedDate = DateTime.Now,
                             TransactionId = transactionId
                         };
-                        _context.BankAccounts.Add(bankAccount);
+                        await _context.BankAccounts.AddAsync(bankAccount);
                     }
                 }
 
-
-
+                // Save all changes together
                 await _context.SaveChangesAsync();
+
+                // Commit transaction
+                await transaction.CommitAsync();
 
                 return new UpdateMemberResponseDto
                 {
@@ -536,10 +330,175 @@ public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
             }
             catch (Exception ex)
             {
+                // Rollback if anything fails
+                await transaction.RollbackAsync();
                 throw new Exception($"Error updating member: {ex.Message}");
             }
         }
-*/
+
+
+        /*    public async Task<UpdateMemberResponseDto> UpdateMember(UpdateMemberDto request)
+            {
+                try
+                {
+                    var member = await _context.Members.FirstOrDefaultAsync(m => m.MemberId == request.MemberId);
+                    if (member == null)
+                    {
+                        return new UpdateMemberResponseDto { Success = false, Message = "Member not found" };
+                    }
+
+                    // Store old PaymentType to check if it changed
+                    var oldPaymentType = member.PaymentType;
+
+                    // Update member details
+                    member.FullName = request.FullName;
+                    member.Address = request.Address;
+                    member.MobileNo = request.MobileNo;
+                    member.Email = request.Email;
+                    if(request.Password != null)
+                    {
+     member.Password = Encoding.UTF8.GetBytes(request.Password);
+                    }
+
+                    member.PaymentType = request.PaymentType;
+                    member.Deposit = request.Deposit;
+                    member.TotalSaving += request.Deposit;
+
+                    _context.Members.Update(member);
+                    await _context.SaveChangesAsync();
+
+
+                    var transactionId = member.TransactionId;
+
+                    // If payment type is same, update existing account record
+                    if (oldPaymentType == request.PaymentType)
+                    {
+                        if (request.PaymentType == PaymentType.Cash)
+                        {
+                            var existingCashAccount = await _context.CashAccounts
+                                .FirstOrDefaultAsync(c => c.TransactionId == transactionId);
+
+                            if (existingCashAccount != null)
+                            {
+                                existingCashAccount.DrAmount = request.Deposit;
+                                existingCashAccount.UpdatedDate = DateTime.Now;
+                                _context.CashAccounts.Update(existingCashAccount);
+                            }
+                            else
+                            {
+                                var cashAccount = new CashAccount
+                                {
+                                    SGId = member.SGId,
+                                    MonthId = request.MonthId,
+                                    Particulars = $"Deposit update for {member.FullName}",
+                                    CrAmount = 0,
+                                    DrAmount = request.Deposit,
+                                    CreatedDate = DateTime.Now,
+                                    UpdatedDate = DateTime.Now,
+                                    TransactionId = transactionId
+                                };
+                                _context.CashAccounts.Add(cashAccount);
+                            }
+                        }
+                        else if (request.PaymentType == PaymentType.Bank)
+                        {
+                            var existingBankAccount = await _context.BankAccounts
+                                .FirstOrDefaultAsync(b => b.TransactionId == transactionId);
+
+                            if (existingBankAccount != null)
+                            {
+                                existingBankAccount.DrAmount = request.Deposit;
+                                existingBankAccount.UpdatedDate = DateTime.Now;
+                                _context.BankAccounts.Update(existingBankAccount);
+                            }
+                            else
+                            {
+                                var bankAccount = new BankAccount
+                                {
+                                    SGId = member.SGId,
+                                    MonthId = request.MonthId,
+                                    Particulars = $"Deposit update for {member.FullName}",
+                                    CrAmount = 0,
+                                    DrAmount = request.Deposit,
+                                    CreatedDate = DateTime.Now,
+                                    UpdatedDate = DateTime.Now,
+                                    TransactionId = transactionId
+                                };
+                                _context.BankAccounts.Add(bankAccount);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Delete opposite account type if payment type changed
+                        if (oldPaymentType == PaymentType.Bank && request.PaymentType == PaymentType.Cash)
+                        {
+                            // Delete BankAccount with same TransactionId
+                            var bankAccounts = await _context.BankAccounts
+                                .Where(b => b.TransactionId == transactionId)
+                                .ToListAsync();
+                            _context.BankAccounts.RemoveRange(bankAccounts);
+                        }
+                        else if (oldPaymentType == PaymentType.Cash && request.PaymentType == PaymentType.Bank)
+                        {
+                            // Delete CashAccount with same TransactionId
+                            var cashAccounts = await _context.CashAccounts
+                                .Where(c => c.TransactionId == transactionId)
+                                .ToListAsync();
+                            _context.CashAccounts.RemoveRange(cashAccounts);
+                        }
+                        await _context.SaveChangesAsync();
+
+                        // Create new account with new PaymentType
+                        if (request.PaymentType == PaymentType.Cash)
+                        {
+                            var cashAccount = new CashAccount
+                            {
+                                SGId = member.SGId,
+                                MonthId = request.MonthId,
+                                Particulars = $"Deposit update for {member.FullName}",
+                                CrAmount = 0,
+                                DrAmount = request.Deposit,
+                                CreatedDate = DateTime.Now,
+                                UpdatedDate = DateTime.Now,
+                                TransactionId = transactionId
+                            };
+                            _context.CashAccounts.Add(cashAccount);
+                        }
+                        else if (request.PaymentType == PaymentType.Bank)
+                        {
+                            var bankAccount = new BankAccount
+                            {
+                                SGId = member.SGId,
+                                MonthId = request.MonthId,
+                                Particulars = $"Deposit update for {member.FullName}",
+                                CrAmount = 0,
+                                DrAmount = request.Deposit,
+                                CreatedDate = DateTime.Now,
+                                UpdatedDate = DateTime.Now,
+                                TransactionId = transactionId
+                            };
+                            _context.BankAccounts.Add(bankAccount);
+                        }
+                    }
+
+
+
+                    await _context.SaveChangesAsync();
+
+                    return new UpdateMemberResponseDto
+                    {
+                        MemberId = member.MemberId,
+                        Success = true,
+                        Message = "Member updated successfully"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error updating member: {ex.Message}");
+                }
+            }
+    */
         public async Task<MemberStatusResponseDto> ActivateMember(int memberId)
         {
             try

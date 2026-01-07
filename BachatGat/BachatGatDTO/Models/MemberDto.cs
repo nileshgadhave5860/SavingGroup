@@ -6,7 +6,23 @@ namespace BachatGatDTO.Models
         public string? Name { get; set; }
         public decimal Balance { get; set; }
     }
+    public class SLIPedingDto
+    {
+        public int MemberId { get; set; }
+        public string MemberName { get; set; } = null!;
+        public decimal SavingPending { get; set; }
+        public decimal LoanPending { get; set; }
+        public decimal EMIAmount{ get; set; }
+        public decimal IntrestPending { get; set; }
+        public decimal LateFeesPendingAmount { get; set; }
+    }
+    public class pendingDetailsDto
+    {
+       public List<SavingPendingByMemberDto> SavingPending{get;set;}=null!;
+       public List<IntrestPendingByMemberDto> IntrestPending{get;set;}=null!;
+       
 
+    }
     public class CreateMemberDto
     {
         public int SGId { get; set; }

@@ -113,7 +113,7 @@ namespace BachatGatDAL.Repositories
 
                 }
 
-                
+
 
                 var response = new SavingTrasactionUpdateResposneDto()
                 {
@@ -142,79 +142,274 @@ namespace BachatGatDAL.Repositories
 
 
         }
+        public async Task<SavingTrasactionUpdateResposneDto> PendingDeposit(PendingDepositdto request)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                Guid TrasactionId;
+
+                List<CashAccount> cashAccounts = new List<CashAccount>();
+                List<BankAccount> bankAccounts = new List<BankAccount>();
+
+                List<SavingTrasaction> savingUpdates = new List<SavingTrasaction>();
+                List<IntrestTrasaction> intrestUpdates = new List<IntrestTrasaction>();
+                List<LatePaymentCharges> latePaymentUpdates = new List<LatePaymentCharges>();
+                // Saving
+                foreach (int stid in request.STIds)
+                {
+                    var result = await _context.SavingTrasactions.FirstOrDefaultAsync(x => x.STId == stid);
+                    if (result != null)
+                    {
+                        TrasactionId = Guid.NewGuid();
+                        result.UpdatedDate = DateTime.Now;
+                        result.PaymentType = request.PaymentType;
+                        result.TrasactionId = TrasactionId;
+                        result.DepositSavingAmount = result.CurrentSavingAmount;
+                        savingUpdates.Add(result);
+                        //_context.SavingTrasactions.Update(result);
+
+                        if (request.PaymentType == (int)PaymentType.Cash)
+                        {
+                            cashAccounts.Add(new CashAccount
+                            {
+                                SGId = result.SGId,
+                                MonthId = result.MonthId,
+                                Particulars = "Member Saving deposit",
+                                CrAmount = 0,
+                                DrAmount = result.CurrentSavingAmount ?? 0,
+                                CreatedDate = DateTime.Now,
+                                UpdatedDate = DateTime.Now,
+                                TransactionId = TrasactionId
+                            });
+                        }
+                        else if (request.PaymentType == (int)PaymentType.Bank)
+                        {
+                            bankAccounts.Add(new BankAccount
+                            {
+                                SGId = result.SGId,
+                                MonthId = result.MonthId,
+                                Particulars = "Member Saving deposit",
+                                CrAmount = 0,
+                                DrAmount = result.CurrentSavingAmount ?? 0,
+                                CreatedDate = DateTime.Now,
+                                UpdatedDate = DateTime.Now,
+                                TransactionId = TrasactionId
+                            });
+                        }
+                    }
+                }
+
+                // Interest
+                foreach (int itid in request.ITId)
+                {
+                    var result = await _context.IntrestTrasactions.FirstOrDefaultAsync(x => x.ITId == itid);
+                    if (result != null)
+                    {
+                        TrasactionId = Guid.NewGuid();
+                        result.UpdatedDate = DateTime.Now;
+                        result.PaymentType = request.PaymentType;
+                        result.TrasactionId = TrasactionId;
+                        result.DepositIntrestAmount = result.CurrentIntrestAmount;
+
+                        //_context.IntrestTrasactions.Update(result);
+                        intrestUpdates.Add(result);
+
+                        if (request.PaymentType == (int)PaymentType.Cash)
+                        {
+                            cashAccounts.Add(new CashAccount
+                            {
+                                SGId = result.SGId,
+                                MonthId = result.MonthId,
+                                Particulars = "Member Interest deposit",
+                                CrAmount = 0,
+                                DrAmount = result.CurrentIntrestAmount,
+                                CreatedDate = DateTime.Now,
+                                UpdatedDate = DateTime.Now,
+                                TransactionId = TrasactionId
+                            });
+                        }
+                        else if (request.PaymentType == (int)PaymentType.Bank)
+                        {
+                            bankAccounts.Add(new BankAccount
+                            {
+                                SGId = result.SGId,
+                                MonthId = result.MonthId,
+                                Particulars = "Member Interest deposit",
+                                CrAmount = 0,
+                                DrAmount = result.CurrentIntrestAmount,
+                                CreatedDate = DateTime.Now,
+                                UpdatedDate = DateTime.Now,
+                                TransactionId = TrasactionId
+                            });
+                        }
+                    }
+                }
+
+                // Late Payment Charges
+                foreach (int lpcid in request.lpcId)
+                {
+                    var result = await _context.LatePaymentCharges.FirstOrDefaultAsync(x => x.LPCID == lpcid);
+                    if (result != null)
+                    {
+                        TrasactionId = Guid.NewGuid();
+                        result.UpdatedDate = DateTime.Now;
+                        result.ChargesDeposit = result.Charges;
+                        latePaymentUpdates.Add(result);
+                        //_context.LatePaymentCharges.Update(result);
+
+                        if (request.PaymentType == (int)PaymentType.Cash)
+                        {
+                            cashAccounts.Add(new CashAccount
+                            {
+                                SGId = result.SGId,
+                                MonthId = result.MonthId,
+                                Particulars = "Member Late Payment deposit",
+                                CrAmount = 0,
+                                DrAmount = result.Charges,
+                                CreatedDate = DateTime.Now,
+                                UpdatedDate = DateTime.Now,
+                                TransactionId = TrasactionId
+                            });
+                        }
+                        else if (request.PaymentType == (int)PaymentType.Bank)
+                        {
+                            bankAccounts.Add(new BankAccount
+                            {
+                                SGId = result.SGId,
+                                MonthId = result.MonthId,
+                                Particulars = "Member Late Payment deposit",
+                                CrAmount = 0,
+                                DrAmount = result.Charges,
+                                CreatedDate = DateTime.Now,
+                                UpdatedDate = DateTime.Now,
+                                TransactionId = TrasactionId
+                            });
+                        }
+                    }
+                }
+
+                // Loan Repayment
+                TrasactionId = Guid.NewGuid();
+                var loanid = await _context.LoansAccounts
+                    .Where(x => x.SGId == request.SGId && x.MemberId == request.MemberId && x.LoanAmount - x.RepaymentAmount > 0)
+                    .Select(x => x.LoanId)
+                    .FirstOrDefaultAsync();
+
+                if (loanid > 0)
+                {
+                    var loanRepayment = new LoanTrasaction
+                    {
+                        SGId = request.SGId,
+                        MonthId = request.MonthId,
+                        MemberId = request.MemberId,
+                        LoanId = loanid,
+                        PaymentType = request.PaymentType,
+                        RepaidLoanAmount = request.EMIAmount,
+                        TrasactionId = TrasactionId,
+                        Createddate = DateTime.Now,
+                        UpdatedDate = DateTime.Now
+                    };
+                    _context.LoanTrasactions.Add(loanRepayment);
+
+                    if (request.PaymentType == (int)PaymentType.Cash)
+                    {
+                        cashAccounts.Add(new CashAccount
+                        {
+                            SGId = request.SGId,
+                            MonthId = request.MonthId,
+                            Particulars = "Member Loan repayment",
+                            CrAmount = 0,
+                            DrAmount = request.EMIAmount,
+                            CreatedDate = DateTime.Now,
+                            UpdatedDate = DateTime.Now,
+                            TransactionId = TrasactionId
+                        });
+                    }
+                    else if (request.PaymentType == (int)PaymentType.Bank)
+                    {
+                        bankAccounts.Add(new BankAccount
+                        {
+                            SGId = request.SGId,
+                            MonthId = request.MonthId,
+                            Particulars = "Member Loan repayment",
+                            CrAmount = 0,
+                            DrAmount = request.EMIAmount,
+                            CreatedDate = DateTime.Now,
+                            UpdatedDate = DateTime.Now,
+                            TransactionId = TrasactionId
+                        });
+                    }
+                }
+
+                if (intrestUpdates.Count > 0)
+                {
+                    _context.IntrestTrasactions.UpdateRange(intrestUpdates);
+                }
+                if (latePaymentUpdates.Count > 0)
+                {
+                    _context.LatePaymentCharges.UpdateRange(latePaymentUpdates);
+                }
+                if (savingUpdates.Count > 0)
+                {
+                    _context.SavingTrasactions.UpdateRange(savingUpdates);
+                }
+                if (cashAccounts.Count > 0)
+                {
+                    _context.CashAccounts.AddRange(cashAccounts);
+                }
+                if (bankAccounts.Count > 0)
+                {
+                    _context.BankAccounts.AddRange(bankAccounts);
+                }
 
 
-        /* public async Task<SavingTrasactionResponseDto> UpdateSavingTrasaction(List<SavingTrasactionUpdateDto> Listreqest)
-         {
-             foreach(var reqest in Listreqest)
-             {
+                // Commit all changes at once
+                await _context.SaveChangesAsync();
+                // Update LoanAccount repayment amount
+                if (loanid > 0)
+                {
+                    var sumRepayment = await _context.LoanTrasactions
+                        .Where(lt => lt.LoanId == loanid)
+                        .SumAsync(lt => lt.RepaidLoanAmount);
+
+                    var loanAccount = await _context.LoansAccounts
+                        .FirstOrDefaultAsync(la => la.LoanId == loanid);
+
+                    if (loanAccount != null)
+                    {
+                        loanAccount.RepaymentAmount = sumRepayment;
+                        _context.LoansAccounts.Update(loanAccount);
+                    }
+
+                    // Save LoanAccount update
+                    await _context.SaveChangesAsync();
+                }
 
 
-             var result=await _context.SavingTrasactions.Where(x=>x.STId==reqest.STId).FirstOrDefaultAsync();
-             if(result!=null)
-             {
-                 Guid TrasactionId=Guid.NewGuid();
-                 result.UpdatedDate=DateTime.Now;
-                 result.PaymentType=reqest.PaymentType;
-                 result.TrasactionId=TrasactionId;
-                 result.DepositSavingAmount=reqest.DepositSavingAmount;
-                 _context.SavingTrasactions.Update(result);
-                 _context.SaveChanges();
 
-                 if (reqest.PaymentType ==(int) PaymentType.Cash)
-                 {
-                     var cashAccount = new CashAccount
-                     {
-                         SGId = result.SGId,
-                         MonthId = result.MonthId,
-                         Particulars = $"Member Saving deposit ",
-                         CrAmount = 0,
-                         DrAmount = reqest.DepositSavingAmount,
-                         CreatedDate = DateTime.Now,
-                         UpdatedDate = DateTime.Now,
-                         TransactionId = TrasactionId
-                     };
-                     _context.CashAccounts.Add(cashAccount);
-                 }
-                 else if (reqest.PaymentType == (int)PaymentType.Bank)
-                 {
-                     var bankAccount = new BankAccount
-                     {
-                         SGId = result.SGId,
-                         MonthId = result.MonthId,
-                         Particulars = $"Member Saving deposit ",
-                         CrAmount = 0,
-                         DrAmount = reqest.DepositSavingAmount,
-                         CreatedDate = DateTime.Now,
-                         UpdatedDate = DateTime.Now,
-                         TransactionId = TrasactionId
-                     };
-                     _context.BankAccounts.Add(bankAccount);
-                 }
+                await transaction.CommitAsync();
 
-                 await _context.SaveChangesAsync();
-                  return new SavingTrasactionResponseDto
-                  {
-                       STID=reqest.STId,
-                        Success=true,
-                         TransactionId=TrasactionId,
-                          Message="Updated Sucessfull"
-                  };
+                return new SavingTrasactionUpdateResposneDto
+                {
+                    Success = true,
+                    Message = "All Pending Deposits Processed"
+                };
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return new SavingTrasactionUpdateResposneDto
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}"
+                };
+            }
+        }
 
-             }
-             else
-             {
-                 return new SavingTrasactionResponseDto
-                  {
-                       STID=reqest.STId,
-                        Success=false,
-                         TransactionId=null,
-                          Message="Updated Failes"
-                  };
 
-               }
-             }
-         }*/
+
+
 
     }
 }

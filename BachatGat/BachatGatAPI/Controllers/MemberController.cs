@@ -105,5 +105,19 @@ namespace BachatGatAPI.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpGet("GetMemberPendingDataBySGId/{sgId}")]
+        public async Task<ActionResult<List<SLIPedingDto>>> GetMemberPendingDataBySGId(int sgId)
+        {
+            try
+            {
+                var result = await _service.GetMemberPendingDataBySGId(sgId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }

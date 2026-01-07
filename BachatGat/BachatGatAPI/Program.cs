@@ -70,6 +70,9 @@ builder.Services.AddScoped<IIncomeExpensesRepository, IncomeExpensesRepository>(
 // Register LatePaymentCharges services
 builder.Services.AddScoped<ILatePaymentChargesRepository, LatePaymentChargesRepository>();
 builder.Services.AddScoped<ILatePaymentChargesService, LatePaymentChargesService>();
+// Register Report services
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportService, ReportService>();
 
 // Register Background Service for Late Payment Charges Calculation
 builder.Services.AddHostedService<LatePaymentChargesBackgroundService>();

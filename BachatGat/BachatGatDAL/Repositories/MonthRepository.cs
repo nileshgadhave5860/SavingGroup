@@ -3,7 +3,7 @@ using BachatGatDAL.Entities;
 using BachatGatDAL.Interfaces;
 using BachatGatDTO.Models;
 using Microsoft.EntityFrameworkCore;
-
+using System.Globalization;
 namespace BachatGatDAL.Repositories
 {
     public class MonthRepository : IMonthRepository
@@ -35,8 +35,10 @@ public async Task<CreateMonthResponseDto> CreateMonth(CreateMonthDto request)
             .AnyAsync(m => m.SGId == request.SGId && m.MonthNo == request.newMonthNo && m.YearNo == request.newYearNo);
 
         if (!currentCheckExist && (lastMonth == null || preCheckExist))
-        {
-            string newMonthName = date.ToString("MMM-yyyy");
+        {  
+            CultureInfo marathi = new CultureInfo("mr-IN");
+
+            string newMonthName = date.ToString("MMMM - yyyy", marathi);
             var newMonth = new MonthMaster
             {
                 SGId = request.SGId,
