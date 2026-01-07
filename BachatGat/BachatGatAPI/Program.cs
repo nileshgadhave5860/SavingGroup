@@ -18,11 +18,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add CORS policy
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? new string[] { };
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins("http://localhost:3000", "https://localhost:3000")
+        builder.WithOrigins(allowedOrigins)
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials();
@@ -80,6 +81,13 @@ builder.Services.AddHostedService<MonthCreateService>();
 // Register AppDbContext using connection string from configuration
 
 builder.Services.AddSwaggerGen();
+
+// Configure Kestrel to listen on port from configuration
+var port = builder.Configuration.GetValue<int>("Kestrel:Port", 7001);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(port);
+});
 
 var app = builder.Build();
 

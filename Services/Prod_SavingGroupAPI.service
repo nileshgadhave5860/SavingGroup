@@ -1,0 +1,15 @@
+[Unit]
+Description=SavingGroupAPI.NET Core Web API
+After=network.target
+
+[Service]
+WorkingDirectory=/var/www/Production/SavingGroupAPI
+ExecStart=/usr/bin/dotnet /var/www/Production/SavingGroupAPI/BachatGatAPI.dll
+Restart=always
+RestartSec=10
+ SyslogIdentifier=BachatGatAPI
+Environment=ASPNETCORE_ENVIRONMENT=Production
+
+[Install]
+WantedBy=multi-user.target
+
