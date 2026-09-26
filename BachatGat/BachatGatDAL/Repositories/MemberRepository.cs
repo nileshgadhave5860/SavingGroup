@@ -75,7 +75,9 @@ namespace BachatGatDAL.Repositories
             try
             {
                 var transactionId = Guid.NewGuid();
-
+                var isexists = await _context.Members.AnyAsync(m =>  m.MobileNo == request.MobileNo && m.SGId == request.SGId);
+                if (!isexists || request.MobileNo==null || request.MobileNo=="" || request.MobileNo=="1234567890")
+                {
                 // Create Member
                 var member = new Member
                 {
@@ -164,6 +166,18 @@ namespace BachatGatDAL.Repositories
                     Success = true,
                     Message = "Member created successfully"
                 };
+                }
+                else
+                {
+                    return new CreateMemberResponseDto
+                    {
+                        MemberId = 0,
+                        FullName = "",
+                        TransactionId = Guid.Empty,
+                        Success = false,
+                        Message = "Member with the same Mobile Number already exists in this Saving Group"
+                    };
+                }
             }
             catch (Exception ex)
             {
@@ -184,6 +198,10 @@ namespace BachatGatDAL.Repositories
                     return new UpdateMemberResponseDto { Success = false, Message = "Member not found" };
                 }
 
+
+                var savingAmount=_context.SavingTrasactions
+                    .Where(st => st.MemberId == request.MemberId)
+                    .Sum(st => (decimal?)st.DepositSavingAmount) ?? 0;
                 // Store old PaymentType to check if it changed
                 var oldPaymentType = member.PaymentType;
 
@@ -198,8 +216,12 @@ namespace BachatGatDAL.Repositories
                 }
 
                 member.PaymentType = request.PaymentType;
-                member.Deposit = request.Deposit;
-                member.TotalSaving += request.Deposit;
+                if( member.Deposit!=request.Deposit)
+                {
+                  member.Deposit = request.Deposit;
+                  member.TotalSaving = request.Deposit+savingAmount;
+                }               
+                
                 // member. = DateTime.Now;
 
                 _context.Members.Update(member);

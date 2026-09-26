@@ -80,12 +80,12 @@ namespace BachatGatDAL.Repositories
             var savingData= await _context.SavingTrasactions
             .Include(x=>x.Member)
             .Where(x=>x.SGId==sgId)
-            .GroupBy(x => new { x.MemberId, x.Member.FullName })
+            .GroupBy(x => new { x.MemberId, x.Member.FullName,x.Member.Deposit })
               .Select(g=> new 
               {
                 MemberId= g.Key.MemberId,
                 MemberName= g.Key.FullName,
-                TotalSaving= g.Sum(x => x.CurrentSavingAmount)
+                TotalSaving= g.Sum(x => x.DepositSavingAmount)+ g.Key.Deposit
               }).ToListAsync();  
 
             var loanData= await _context.LoansAccounts

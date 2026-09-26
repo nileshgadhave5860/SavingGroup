@@ -53,6 +53,1056 @@
         }
       }
     },
+    "/api/Bank/deposit": {
+      "post": {
+        "tags": [
+          "Bank"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BankRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BankRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BankRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bank/withdraw": {
+      "post": {
+        "tags": [
+          "Bank"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BankRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BankRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BankRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IncomeExpenses/create": {
+      "post": {
+        "tags": [
+          "IncomeExpenses"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IncomeExpensesRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IncomeExpensesRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/IncomeExpensesRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IncomeExpenses/GetBySGId/{sgId}": {
+      "get": {
+        "tags": [
+          "IncomeExpenses"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IncomeExpensesAccountDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IncomeExpensesAccountDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IncomeExpensesAccountDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IncomeExpenses/{ieId}": {
+      "delete": {
+        "tags": [
+          "IncomeExpenses"
+        ],
+        "parameters": [
+          {
+            "name": "ieId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IncomeExpenses/update": {
+      "put": {
+        "tags": [
+          "IncomeExpenses"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIncomeExpensesDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIncomeExpensesDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIncomeExpensesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncomeExpensesResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IntrestTrasaction/IntrestPending/{SGId}": {
+      "get": {
+        "tags": [
+          "IntrestTrasaction"
+        ],
+        "parameters": [
+          {
+            "name": "SGId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IntrestTrasaction/IntrestPendingByMember/{SGId}/{MemberId}": {
+      "get": {
+        "tags": [
+          "IntrestTrasaction"
+        ],
+        "parameters": [
+          {
+            "name": "SGId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MemberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingByMemberDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingByMemberDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingByMemberDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/IntrestTrasaction/UpdateIntrestTrasaction": {
+      "put": {
+        "tags": [
+          "IntrestTrasaction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/IntrestTrasactionUpdateDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/IntrestTrasactionUpdateDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/IntrestTrasactionUpdateDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntrestTrasactionResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntrestTrasactionResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntrestTrasactionResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LatePaymentCharges/auto-calculate/{sgId}": {
+      "post": {
+        "tags": [
+          "LatePaymentCharges"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LatePaymentCharges/pending/{sgId}": {
+      "get": {
+        "tags": [
+          "LatePaymentCharges"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LatePaymentChargesAccountDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LatePaymentChargesAccountDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LatePaymentChargesAccountDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LatePaymentCharges/delete/{lpcId}": {
+      "delete": {
+        "tags": [
+          "LatePaymentCharges"
+        ],
+        "parameters": [
+          {
+            "name": "lpcId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LatePaymentCharges/update": {
+      "put": {
+        "tags": [
+          "LatePaymentCharges"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LatePaymentChargesRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LatePaymentChargesRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LatePaymentChargesRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatePaymentChargesReposnseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LatePaymentCharges/pending-by-member/{sgId}/{memberId}": {
+      "get": {
+        "tags": [
+          "LatePaymentCharges"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberPendingLatePaymentDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberPendingLatePaymentDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberPendingLatePaymentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LoansAccount/GetLoanAccounts/{sgId}": {
+      "get": {
+        "tags": [
+          "LoansAccount"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanAccountResponseDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanAccountResponseDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanAccountResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LoansAccount/GetLoanMembers/{sgId}": {
+      "get": {
+        "tags": [
+          "LoansAccount"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanMemberDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanMemberDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanMemberDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LoansAccount/create": {
+      "post": {
+        "tags": [
+          "LoansAccount"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoansAccountRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoansAccountRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoansAccountRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLoanResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLoanResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLoanResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LoansAccount/update": {
+      "put": {
+        "tags": [
+          "LoansAccount"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoansAccountRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoansAccountRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoansAccountRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLoanResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLoanResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLoanResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LoanTrasaction/create": {
+      "post": {
+        "tags": [
+          "LoanTrasaction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLoanTrasactionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLoanTrasactionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLoanTrasactionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanTrasactionResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanTrasactionResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanTrasactionResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LoanTrasaction/update": {
+      "put": {
+        "tags": [
+          "LoanTrasaction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLoanTrasactionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLoanTrasactionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLoanTrasactionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanTrasactionResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanTrasactionResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanTrasactionResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LoanTrasaction/{ltId}": {
+      "delete": {
+        "tags": [
+          "LoanTrasaction"
+        ],
+        "parameters": [
+          {
+            "name": "ltId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteLoanTrasactionResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteLoanTrasactionResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteLoanTrasactionResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/LoanTrasaction/loan/{loanId}": {
+      "get": {
+        "tags": [
+          "LoanTrasaction"
+        ],
+        "parameters": [
+          {
+            "name": "loanId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLoanTrasactionByLoanIdResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLoanTrasactionByLoanIdResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLoanTrasactionByLoanIdResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Member/create": {
       "post": {
         "tags": [
@@ -269,6 +1319,55 @@
         }
       }
     },
+    "/api/Member/GetMemberPendingDataBySGId/{sgId}": {
+      "get": {
+        "tags": [
+          "Member"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SLIPedingDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SLIPedingDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SLIPedingDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Month/create": {
       "post": {
         "tags": [
@@ -357,6 +1456,505 @@
         }
       }
     },
+    "/api/Month/GetMonthBySGId/{sgId}": {
+      "get": {
+        "tags": [
+          "Month"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMonthBySGIdResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMonthBySGIdResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMonthBySGIdResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/saving-pending/{sgId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingReportDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingReportDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/loan-pending/{sgId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanPendingReportDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanPendingReportDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoanPendingReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/intrest-pending/{sgId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingReportDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingReportDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IntrestPendingReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/late-payment-pending/{sgId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LatePaymetPendingReportDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LatePaymetPendingReportDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LatePaymetPendingReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/member-report/{sgId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberReportDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberReportDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/month-deposit/{sgId}/{monthId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "monthId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthDepositReportDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthDepositReportDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthDepositReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/month-pending/{sgId}/{monthId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "monthId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthPendingReportDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthPendingReportDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthPendingReportDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/months/{sgId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonthDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Report/members/{sgId}": {
+      "get": {
+        "tags": [
+          "Report"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberDataDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberDataDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberDataDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/SavingGroup/register": {
       "post": {
         "tags": [
@@ -398,6 +1996,307 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SavingGroupResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SavingGroup/GetSavingGroupDashboardData/{sgId}": {
+      "get": {
+        "tags": [
+          "SavingGroup"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingGroupdashboardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingGroupdashboardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingGroupdashboardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SavingGroup/GetMemberDashboardData/{sgId}/{memberId}": {
+      "get": {
+        "tags": [
+          "SavingGroup"
+        ],
+        "parameters": [
+          {
+            "name": "sgId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberDashboardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberDashboardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberDashboardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SavingTrasaction/SavingPending/{SGId}": {
+      "get": {
+        "tags": [
+          "SavingTrasaction"
+        ],
+        "parameters": [
+          {
+            "name": "SGId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SavingTrasaction/SavingPendingByMember/{SGId}/{MemberId}": {
+      "get": {
+        "tags": [
+          "SavingTrasaction"
+        ],
+        "parameters": [
+          {
+            "name": "SGId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MemberId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingByMemberDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingByMemberDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavingPendingByMemberDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SavingTrasaction/UpdateSavingTrasaction": {
+      "put": {
+        "tags": [
+          "SavingTrasaction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateDto"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateDto"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateResposneDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateResposneDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateResposneDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/SavingTrasaction/PendingDeposit": {
+      "post": {
+        "tags": [
+          "SavingTrasaction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PendingDepositdto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PendingDepositdto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PendingDepositdto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateResposneDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateResposneDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingTrasactionUpdateResposneDto"
                 }
               }
             }
@@ -466,6 +2365,67 @@
           "token": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BankRequestDto": {
+        "type": "object",
+        "properties": {
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BankResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateLoanTrasactionDto": {
+        "type": "object",
+        "properties": {
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loanId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repaidLoanAmount": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -542,6 +2502,14 @@
           "sgId": {
             "type": "integer",
             "format": "int32"
+          },
+          "newMonthNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "newYearNo": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -565,6 +2533,19 @@
             "type": "integer",
             "format": "int32"
           },
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DeleteLoanTrasactionResponseDto": {
+        "type": "object",
+        "properties": {
           "success": {
             "type": "boolean"
           },
@@ -612,6 +2593,26 @@
         },
         "additionalProperties": false
       },
+      "GetLoanTrasactionByLoanIdResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "loanTrasactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LoanTrasactionDetailDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetMemberBySGIdResponseDto": {
         "type": "object",
         "properties": {
@@ -628,6 +2629,508 @@
           "message": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMonthBySGIdResponseDto": {
+        "type": "object",
+        "properties": {
+          "months": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MonthDto"
+            },
+            "nullable": true
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IncomeExpensesAccountDto": {
+        "type": "object",
+        "properties": {
+          "ieId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthName": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "particulars": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "income": {
+            "type": "number",
+            "format": "double"
+          },
+          "expenses": {
+            "type": "number",
+            "format": "double"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IncomeExpensesRequestDto": {
+        "type": "object",
+        "properties": {
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "particulars": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "incomeExpensesType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IncomeExpensesResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IntrestPendingByMemberDto": {
+        "type": "object",
+        "properties": {
+          "itId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthName": {
+            "type": "string",
+            "nullable": true
+          },
+          "intrestPending": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IntrestPendingDto": {
+        "type": "object",
+        "properties": {
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "noOfMonth": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "intrestPending": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IntrestPendingReportDto": {
+        "type": "object",
+        "properties": {
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "pendingMonths": {
+            "type": "string",
+            "nullable": true
+          },
+          "intrestPending": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IntrestTrasactionResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IntrestTrasactionUpdateDto": {
+        "type": "object",
+        "properties": {
+          "itId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "depositIntrestAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LatePaymentChargesAccountDto": {
+        "type": "object",
+        "properties": {
+          "lpcid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "monthName": {
+            "type": "string",
+            "nullable": true
+          },
+          "noOfDay": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perDayCharges": {
+            "type": "number",
+            "format": "double"
+          },
+          "charges": {
+            "type": "number",
+            "format": "double"
+          },
+          "chargesDeposit": {
+            "type": "number",
+            "format": "double"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LatePaymentChargesReposnseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LatePaymentChargesRequestDto": {
+        "type": "object",
+        "properties": {
+          "lpcId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "depositAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LatePaymetPendingReportDto": {
+        "type": "object",
+        "properties": {
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "pendingMonths": {
+            "type": "string",
+            "nullable": true
+          },
+          "latePaymentPending": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanAccountResponseDto": {
+        "type": "object",
+        "properties": {
+          "loanId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loanAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "repaymentAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "pendingLoanAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "interestRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "termInMonths": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthlyInstallment": {
+            "type": "number",
+            "format": "double"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanMemberDto": {
+        "type": "object",
+        "properties": {
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanPendingReportDto": {
+        "type": "object",
+        "properties": {
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "loanAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "repaymentAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pendingLoanAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanTrasactionDetailDto": {
+        "type": "object",
+        "properties": {
+          "ltId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "loanId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repaidLoanAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "trasactionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "updatedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createddate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoanTrasactionResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "ltId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoansAccountRequestDto": {
+        "type": "object",
+        "properties": {
+          "loanId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loanAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "interestRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "termInMonths": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthlyInstallment": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -676,6 +3179,125 @@
         },
         "additionalProperties": false
       },
+      "MemberDashboardDto": {
+        "type": "object",
+        "properties": {
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "savingPendingMonthsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "savingPendingAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "intrestPendingMonthsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "intrestPendingAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "lateFeesPendingAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalSavings": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalLoan": {
+            "type": "number",
+            "format": "double"
+          },
+          "savingGroupDetails": {
+            "$ref": "#/components/schemas/SavingGroupdashboardDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MemberDataDto": {
+        "type": "object",
+        "properties": {
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MemberPendingLatePaymentDto": {
+        "type": "object",
+        "properties": {
+          "lpcId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "monthName": {
+            "type": "string",
+            "nullable": true
+          },
+          "noOfDay": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perDayCharges": {
+            "type": "number",
+            "format": "double"
+          },
+          "charges": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MemberReportDto": {
+        "type": "object",
+        "properties": {
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalSaving": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pendingLoan": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pendingIntrest": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pendingLatePayment": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "MemberStatusResponseDto": {
         "type": "object",
         "properties": {
@@ -696,6 +3318,96 @@
         },
         "additionalProperties": false
       },
+      "MonthDepositReportDto": {
+        "type": "object",
+        "properties": {
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "savingDeposit": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "loanDeposit": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "intrestDeposit": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "latePaymentDeposit": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MonthDto": {
+        "type": "object",
+        "properties": {
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthName": {
+            "type": "string",
+            "nullable": true
+          },
+          "monthNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "yearNo": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MonthPendingReportDto": {
+        "type": "object",
+        "properties": {
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "savingPending": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "loanPending": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "intrestPending": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "latePaymentPending": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "PaymentType": {
         "enum": [
           1,
@@ -703,6 +3415,90 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "PendingDepositdto": {
+        "type": "object",
+        "properties": {
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "itId": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "lpcId": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "emiAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SLIPedingDto": {
+        "type": "object",
+        "properties": {
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "savingPending": {
+            "type": "number",
+            "format": "double"
+          },
+          "loanPending": {
+            "type": "number",
+            "format": "double"
+          },
+          "emiAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "intrestPending": {
+            "type": "number",
+            "format": "double"
+          },
+          "lateFeesPendingAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
       },
       "SavingGroupRegisterDto": {
         "type": "object",
@@ -739,7 +3535,7 @@
             "type": "number",
             "format": "double"
           },
-          "monthlyRateOfIntrest": {
+          "interestEarned": {
             "type": "number",
             "format": "double"
           },
@@ -776,6 +3572,247 @@
           "message": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SavingGroupdashboardDto": {
+        "type": "object",
+        "properties": {
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sgName": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalMembers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "savingsBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalSavings": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalLoans": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalInterestEarned": {
+            "type": "number",
+            "format": "double"
+          },
+          "cashBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "bankBalance": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalLateFeesCollected": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalExpenses": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalIncome": {
+            "type": "number",
+            "format": "double"
+          },
+          "savingPendingMembersCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "savingPendingAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "intrestPendingMembersCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "intrestPendingAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "lateFeesPendingMembersCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lateFeesPendingAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SavingPendingByMemberDto": {
+        "type": "object",
+        "properties": {
+          "stId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthName": {
+            "type": "string",
+            "nullable": true
+          },
+          "savingPending": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SavingPendingDto": {
+        "type": "object",
+        "properties": {
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "noOfMonth": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "savingPending": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SavingPendingReportDto": {
+        "type": "object",
+        "properties": {
+          "memberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "pendingMonths": {
+            "type": "string",
+            "nullable": true
+          },
+          "savingPending": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SavingTrasactionUpdateDto": {
+        "type": "object",
+        "properties": {
+          "stId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "depositSavingAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SavingTrasactionUpdateResposneDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateIncomeExpensesDto": {
+        "type": "object",
+        "properties": {
+          "ieId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "particulars": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "incomeExpensesType": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateLoanResponseDto": {
+        "type": "object",
+        "properties": {
+          "loanId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateLoanTrasactionDto": {
+        "type": "object",
+        "properties": {
+          "ltId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sgId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "loanId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "repaidLoanAmount": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

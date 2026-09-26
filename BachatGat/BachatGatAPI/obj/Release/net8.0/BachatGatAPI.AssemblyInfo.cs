@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BachatGatAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c235c324d72a77726663f4250eb8d460bbab6170")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3508eb7199837a577adb408f968dc143dfe6484e")]
 [assembly: System.Reflection.AssemblyProductAttribute("BachatGatAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BachatGatAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

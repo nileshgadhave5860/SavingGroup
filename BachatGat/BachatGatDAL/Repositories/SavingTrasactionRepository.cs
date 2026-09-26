@@ -149,6 +149,7 @@ namespace BachatGatDAL.Repositories
             {
                 Guid TrasactionId;
 
+
                 List<CashAccount> cashAccounts = new List<CashAccount>();
                 List<BankAccount> bankAccounts = new List<BankAccount>();
 
