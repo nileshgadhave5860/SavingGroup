@@ -103,5 +103,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapGet("/", () => new
+{
+    message = "API is running"
+});
 app.Run();
