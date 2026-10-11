@@ -7,6 +7,7 @@
 !*.cs
 !*.json
 !.gitignore
+!Dockerfile
 !README.md
 !TODO.md
 
