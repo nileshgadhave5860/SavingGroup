@@ -1,9 +1,6 @@
 name: BachatGatAPI CD
 
 on:
-  push:
-    branches: [main]
-    paths: ["BachatGat/**", ".github/workflows/BachatGatAPI-cd.yml"]
   workflow_dispatch:
 
 concurrency: BachatGatAPI-cd
@@ -44,7 +41,8 @@ jobs:
           env = os.environ
           # Optional secrets/variables override the values stored in the file
           if env.get("DB_CONNECTION_STRING"): cfg["ConnectionStrings"]["DefaultConnection"] = env["DB_CONNECTION_STRING"]
-          if env.get("JWT_KEY"): cfg["Jwt"]["Key"] = env["JWT_KEY"]          if env.get("JWT_ISSUER"): cfg["Jwt"]["Issuer"] = env["JWT_ISSUER"]
+          if env.get("JWT_KEY"): cfg["Jwt"]["Key"] = env["JWT_KEY"]
+          if env.get("JWT_ISSUER"): cfg["Jwt"]["Issuer"] = env["JWT_ISSUER"]
           if env.get("JWT_AUDIENCE"): cfg["Jwt"]["Audience"] = env["JWT_AUDIENCE"]
           if env.get("JWT_EXPIRES_MINUTES"): cfg["Jwt"]["ExpiresMinutes"] = int(env["JWT_EXPIRES_MINUTES"])
           if env.get("CORS_ALLOWED_ORIGINS"):

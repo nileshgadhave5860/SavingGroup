@@ -1,11 +1,7 @@
 name: BachatGatWeb CI
 
 on:
-  pull_request:
-    paths: ["bachatgatui/**", ".github/workflows/BachatGatWeb-ci.yml"]
-  push:
-    branches-ignore: [main]
-    paths: ["bachatgatui/**", ".github/workflows/BachatGatWeb-ci.yml"]
+  workflow_dispatch:
 
 jobs:
   build:

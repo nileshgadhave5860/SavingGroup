@@ -1,9 +1,6 @@
 name: BachatGatWeb CD
 
 on:
-  push:
-    branches: [main]
-    paths: ["bachatgatui/**", ".github/workflows/BachatGatWeb-cd.yml"]
   workflow_dispatch:
 
 concurrency: BachatGatWeb-cd
