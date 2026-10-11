@@ -21,3 +21,8 @@ BachatGatAPI/bin/**
 !*/
 !.github/
 !.vscode/
+
+# Build output
+**/bin/
+**/obj/
+.vs/
