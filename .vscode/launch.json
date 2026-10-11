@@ -1,0 +1,37 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "BachatGat API",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-api",
+      "program": "${workspaceFolder}/BachatGat/BachatGatAPI/bin/Debug/net8.0/BachatGatAPI.dll",
+      "cwd": "${workspaceFolder}/BachatGat/BachatGatAPI",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/swagger"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:7001"
+      }
+    },
+    {
+      "name": "BachatGat UI",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm start",
+      "cwd": "${workspaceFolder}/bachatgatui"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "BachatGat API + UI",
+      "configurations": ["BachatGat API", "BachatGat UI"],
+      "stopAll": true
+    }
+  ]
+}

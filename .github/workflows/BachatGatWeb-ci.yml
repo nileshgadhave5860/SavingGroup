@@ -1,0 +1,12 @@
+name: BachatGatWeb CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build UI image (npm ci + build inside Docker)
+        run: docker build -t bachatgat-ui:ci bachatgatui
