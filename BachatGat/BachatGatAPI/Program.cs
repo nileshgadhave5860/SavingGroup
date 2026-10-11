@@ -3,13 +3,11 @@ using BachatGatDAL.Repositories;
 using BachatGatBAL.Services;
 using BachatGatBAL.Interfaces;
 using BachatGatDAL.Data;
-//using BachatGatBGS.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using System.Diagnostics;
 using System.Linq;
-using BachatGatBGS;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,9 +73,6 @@ builder.Services.AddScoped<ILatePaymentChargesService, LatePaymentChargesService
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportService, ReportService>();
 
-// Register Background Service for Late Payment Charges Calculation
-builder.Services.AddHostedService<LatePaymentChargesBackgroundService>();
-builder.Services.AddHostedService<MonthCreateService>();
 // Register AppDbContext using connection string from configuration
 
 builder.Services.AddSwaggerGen();
