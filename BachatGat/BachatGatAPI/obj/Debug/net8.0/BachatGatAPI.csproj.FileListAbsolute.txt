@@ -173,3 +173,4 @@ D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\Microsoft.
 D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\BachatGatBGS.dll
 D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\bin\Debug\net8.0\BachatGatBGS.pdb
+D:\AdvanceProject\SavingGroup\BachatGat\BachatGatAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
