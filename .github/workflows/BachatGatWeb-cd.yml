@@ -2,6 +2,12 @@ name: BachatGatWeb CD
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment (uses that GitHub Environment's secrets/variables)"
+        type: choice
+        options: [Production, Development]
+        default: Production
 
 concurrency: BachatGatWeb-cd
 
@@ -17,7 +23,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: Production
+    environment: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
 
