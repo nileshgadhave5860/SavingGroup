@@ -1,0 +1,16 @@
+name: BachatGatWeb CI
+
+on:
+  pull_request:
+    paths: ["bachatgatui/**", ".github/workflows/BachatGatWeb-ci.yml"]
+  push:
+    branches-ignore: [main]
+    paths: ["bachatgatui/**", ".github/workflows/BachatGatWeb-ci.yml"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build UI image (npm ci + build inside Docker)
+        run: docker build -t bachatgat-ui:ci bachatgatui

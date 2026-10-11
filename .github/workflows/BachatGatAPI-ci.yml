@@ -1,0 +1,16 @@
+name: BachatGatAPI CI
+
+on:
+  pull_request:
+    paths: ["BachatGat/**", ".github/workflows/BachatGatAPI-ci.yml"]
+  push:
+    branches-ignore: [main]
+    paths: ["BachatGat/**", ".github/workflows/BachatGatAPI-ci.yml"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image (restore, compile, publish inside Docker)
+        run: docker build -f BachatGat/Dockerfile -t bachatgat-api:ci BachatGat

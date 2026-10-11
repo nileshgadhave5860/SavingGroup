@@ -1,0 +1,81 @@
+name: BachatGatAPI CD
+
+on:
+  push:
+    branches: [main]
+    paths: ["BachatGat/**", ".github/workflows/BachatGatAPI-cd.yml"]
+  workflow_dispatch:
+
+concurrency: BachatGatAPI-cd
+
+# Secrets: SSH_HOST, SSH_USER (root), SSH_PASSWORD (or SSH_KEY = private key), SSH_PORT (optional, default 22)
+#          Optional secrets DB_CONNECTION_STRING, JWT_KEY override appsettings.Production.json before the image is built
+# Variables (optional, override file defaults): JWT_ISSUER, JWT_AUDIENCE, JWT_EXPIRES_MINUTES,
+#          CORS_ALLOWED_ORIGINS (comma separated), LOG_LEVEL
+# Server folder /var/www/Production/BachatGatAPI receives bachatgat-api.tar. Host nginx should proxy to 127.0.0.1:7001.
+env:
+  IMAGE: bachatgat-api
+  DEPLOY_PATH: ${{ vars.API_DEPLOY_PATH || '/var/www/Production/BachatGatAPI' }}
+  HOST_PORT: ${{ vars.API_HOST_PORT || '7001' }}
+  SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+  SSHPASS: ${{ secrets.SSH_PASSWORD }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fill appsettings.Production.json from secrets
+        env:
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
+          JWT_KEY: ${{ secrets.JWT_KEY }}
+          JWT_ISSUER: ${{ vars.JWT_ISSUER }}
+          JWT_AUDIENCE: ${{ vars.JWT_AUDIENCE }}
+          JWT_EXPIRES_MINUTES: ${{ vars.JWT_EXPIRES_MINUTES }}
+          CORS_ALLOWED_ORIGINS: ${{ vars.CORS_ALLOWED_ORIGINS }}
+          LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          p = "BachatGat/BachatGatAPI/appsettings.Production.json"
+          cfg = json.load(open(p))
+          env = os.environ
+          # Optional secrets/variables override the values stored in the file
+          if env.get("DB_CONNECTION_STRING"): cfg["ConnectionStrings"]["DefaultConnection"] = env["DB_CONNECTION_STRING"]
+          if env.get("JWT_KEY"): cfg["Jwt"]["Key"] = env["JWT_KEY"]          if env.get("JWT_ISSUER"): cfg["Jwt"]["Issuer"] = env["JWT_ISSUER"]
+          if env.get("JWT_AUDIENCE"): cfg["Jwt"]["Audience"] = env["JWT_AUDIENCE"]
+          if env.get("JWT_EXPIRES_MINUTES"): cfg["Jwt"]["ExpiresMinutes"] = int(env["JWT_EXPIRES_MINUTES"])
+          if env.get("CORS_ALLOWED_ORIGINS"):
+              cfg["Cors"]["AllowedOrigins"] = [o.strip() for o in env["CORS_ALLOWED_ORIGINS"].split(",") if o.strip()]
+          if env.get("LOG_LEVEL"): cfg["Logging"]["LogLevel"]["Default"] = env["LOG_LEVEL"]
+          json.dump(cfg, open(p, "w"), indent=2)
+          PY
+
+      - name: Build image and export .tar
+        run: |
+          docker build -f BachatGat/Dockerfile -t $IMAGE:latest BachatGat
+          docker save $IMAGE:latest -o $IMAGE.tar
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p $SSH_PORT "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+          if [ -n "${{ secrets.SSH_KEY }}" ]; then
+            echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+            echo "SSH_CMD=ssh -i $HOME/.ssh/id_deploy -p $SSH_PORT" >> $GITHUB_ENV
+            echo "SCP_CMD=scp -i $HOME/.ssh/id_deploy -P $SSH_PORT" >> $GITHUB_ENV
+          else
+            sudo apt-get install -y sshpass
+            echo "SSH_CMD=sshpass -e ssh -p $SSH_PORT" >> $GITHUB_ENV
+            echo "SCP_CMD=sshpass -e scp -P $SSH_PORT" >> $GITHUB_ENV
+          fi
+
+      - name: Upload .tar and restart container
+        env:
+          TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        run: |
+          $SSH_CMD $TARGET "mkdir -p $DEPLOY_PATH"
+          $SCP_CMD $IMAGE.tar $TARGET:$DEPLOY_PATH/$IMAGE.tar
+          $SSH_CMD $TARGET "cd $DEPLOY_PATH && docker load -i $IMAGE.tar && docker rm -f $IMAGE 2>/dev/null || true && docker run -d --name $IMAGE --restart unless-stopped -e ASPNETCORE_ENVIRONMENT=Production -p 127.0.0.1:$HOST_PORT:7001 $IMAGE:latest && docker image prune -f"
